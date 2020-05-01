@@ -2,11 +2,6 @@ package com.mine.castile.listener;
 
 import java.util.EventObject;
 
-/**
- * ModelEvent<p />
- * Change log:<b />
- * 06.10.2009 : created by o.korneychuk
- */
 public class ModelEvent extends EventObject {
     /**
      * Constructs a prototypical Event.

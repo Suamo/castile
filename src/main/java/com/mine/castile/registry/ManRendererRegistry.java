@@ -3,11 +3,6 @@ package com.mine.castile.registry;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * ManDirectionRegistry<p />
- * Change log:<br />
- * 27.11.2009 : created by o.korneychuk
- */
 public class ManRendererRegistry {
     private static ManRendererRegistry instance = new ManRendererRegistry();
     private Map<Direction, FrameRendererRegistry> map;

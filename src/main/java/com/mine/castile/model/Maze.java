@@ -3,11 +3,6 @@ package com.mine.castile.model;
 import org.apache.commons.lang.Validate;
 import com.mine.castile.registry.Cell;
 
-/**
- * Maze<p />
- * Change log:<br />
- * 15.10.2009 : created by o.korneychuk
- */
 public class Maze {
     private Cell[][] cells;
 

@@ -6,10 +6,6 @@ import com.mine.castile.registry.Season;
 
 import java.awt.*;
 
-/**
- * Created by Oleg A. Korneychuk
- * Date: 06.09.2009
- */
 public interface IModel {
     Cell get(int row, int column) throws IndexOutOfBoundsException;
     void set(int row, int column, Cell cell) throws IndexOutOfBoundsException;
