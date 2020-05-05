@@ -5,7 +5,7 @@ plain:
   blocking: false
   actions:
     stepInto:
-      energyPerAction: 1
+      energyPerAction: 2
       delayPerAction: 100
 
 tree:
