@@ -1,0 +1,119 @@
+plain:
+  appear:
+    onStart:
+      chance: -1
+  blocking: false
+  actions:
+    stepInto:
+      energyPerAction: 1
+      delayPerAction: 100
+
+tree:
+  appear:
+    onStart:
+      chance: 10
+    inGame:
+      chance: 5
+      replaceObjects: plain
+  blocking: true
+  actions:
+    hits:
+      count: 3
+      energyPerAction: 3
+      delayPerAction: 500
+      whenNoActionTransformsTo: plain
+
+puddle:
+  appear:
+    onStart:
+      chance: 10
+  blocking: false
+    actions:
+      stepInto:
+        energyPerAction: 2
+        delayPerAction: 200
+      gather:
+        count: 3
+        energyPerAction: 2
+        delayPerAction: 200
+      hits:
+        count: 2
+        energyPerAction: 2
+        delayPerAction: 200
+        whenNoActionTransformsTo: plain
+  evolution: plain
+
+wall:
+  blocking: true
+
+deer:
+  appear:
+    onStart:
+      chance: 0
+    inGame:
+      chance: 25
+      ifObjectInGame: bush
+      replaceObjects: plain
+  disapear:
+    chance: 100
+  lifeTime: 20000
+  blocking: true
+  actions:
+    hits:
+      count: 2
+      energyPerAction: 2
+      delayPerAction: 200
+      whenNoActionTransformsTo: deerMeat
+
+deerMeat:
+  appear:
+    onStart:
+      chance: 0
+    inGame:
+      chance: 0
+  disapear:
+    chance: 100
+    checkInterval: 20000
+  blocking: true
+  actions:
+    hits:
+      count: 3
+      energyPerAction: 2
+      delayPerAction: 200
+      whenNoActionTransformsTo: plain
+
+predator:
+  appear:
+    onStart:
+      chance: 0
+    inGame:
+      chance: 25
+      ifObjectInGame: deer
+      replaceObjects: plain
+  disapear:
+    chance: 100
+    checkInterval: 20000
+  blocking: true
+  actions:
+    hits:
+      count: 5
+      energyPerAction: 5
+      delayPerAction: 200
+      whenNoActionTransformsTo: predatorMeat
+
+predatorMeat:
+  appear:
+    onStart:
+      chance: 0
+    inGame:
+      chance: 0
+  disapear:
+    chance: 100
+    checkInterval: 20000
+  blocking: true
+  actions:
+    hits:
+      count: 3
+      energyPerAction: 2
+      delayPerAction: 200
+      whenNoActionTransformsTo: plain

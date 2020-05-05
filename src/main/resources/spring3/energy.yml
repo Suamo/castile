@@ -1,0 +1,19 @@
+food:
+  onStart: 512
+  consumptionPerEnergy:
+    default: 1
+
+water:
+  onStart: 512
+  consumptionPerEnergy:
+    default: 1
+
+mutationResistance:
+  onStart: 512
+  consumptionPerEnergy:
+    default: 1
+
+inspiration:
+  onStart: 512
+  consumptionPerEnergy:
+    default: 3
