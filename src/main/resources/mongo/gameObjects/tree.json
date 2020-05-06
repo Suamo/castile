@@ -2,14 +2,31 @@
   "_id": "tree",
   "appear": {
     "onStart": {
-      "chance": -1
+      "chance": 10
+    },
+    "inGame": {
+      "chance": 10,
+      "replaceObjects": "plain"
     }
   },
   "blocking": false,
   "actions": {
-    "stepInto": {
+    "hits": {
+      "count": 3,
       "energyPerAction": 3,
-      "delayPerAction": 200
+      "delayPerAction": 500,
+      "whenNoActionTransformsTo": "plain"
+    }
+  },
+  "seasonOverrides": {
+    "spring": {
+      "actions": {
+        "gather": {
+          "count": 3,
+          "energyPerAction": 2,
+          "delayPerAction": 500
+        }
+      }
     }
   }
 }
