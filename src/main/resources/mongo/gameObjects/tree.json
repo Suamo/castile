@@ -1,0 +1,15 @@
+{
+  "_id": "tree",
+  "appear": {
+    "onStart": {
+      "chance": -1
+    }
+  },
+  "blocking": false,
+  "actions": {
+    "stepInto": {
+      "energyPerAction": 3,
+      "delayPerAction": 200
+    }
+  }
+}

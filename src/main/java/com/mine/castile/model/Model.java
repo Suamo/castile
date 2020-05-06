@@ -6,10 +6,13 @@ import com.mine.castile.Constants;
 import com.mine.castile.listener.IModelListener;
 import com.mine.castile.listener.ModelEvent;
 import com.mine.castile.registry.Cell;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 
+@Component
 public class Model implements IModel {
     protected EventListenerList listenerList = new EventListenerList();
 
@@ -18,7 +21,7 @@ public class Model implements IModel {
     private Point enterLocation;
     private Season season;
 
-    public Model(Maze maze) {
+    public Model(Maze maze, MongoTemplate mongoTemplate) {
         this.maze = maze;
         season = Season.SUMMER;
         setup();

@@ -28,19 +28,19 @@ puddle:
     onStart:
       chance: 10
   blocking: false
-    actions:
-      stepInto:
-        energyPerAction: 2
-        delayPerAction: 200
-      gather:
-        count: 3
-        energyPerAction: 2
-        delayPerAction: 200
-      hits:
-        count: 2
-        energyPerAction: 2
-        delayPerAction: 200
-        whenNoActionTransformsTo: plain
+  actions:
+    stepInto:
+      energyPerAction: 2
+      delayPerAction: 200
+    gather:
+      count: 3
+      energyPerAction: 2
+      delayPerAction: 200
+    hits:
+      count: 2
+      energyPerAction: 2
+      delayPerAction: 200
+      whenNoActionTransformsTo: plain
   evolution: plain
 
 wall:

@@ -7,6 +7,7 @@ import com.mine.castile.model.Man;
 import com.mine.castile.registry.*;
 import com.mine.castile.renderer.ImageRenderer;
 import org.apache.commons.lang.Validate;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ import java.awt.event.KeyEvent;
 
 import static javax.swing.KeyStroke.getKeyStroke;
 
+@Component
 public class View extends JComponent {
     private IModel model;
 

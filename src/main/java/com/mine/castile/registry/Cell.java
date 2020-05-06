@@ -10,10 +10,10 @@ public enum Cell {
     PUDDLE(1, 4, 100, 5, "puddle"),
     WATERNEST(1, 4, 500, 5, "stream"),
 
-    BUSH(2, 8, 500, 5, "bush", PLAIN),
-    TREE(3, 16, 1000, 5, "tree", PLAIN),
+    BUSH(2, 8, 500, 5, "bush"),
+    TREE(3, 16, 1000, 5, "tree"),
 
-    ROCK(3, 16, 1000, 5, "rock", PLAIN),
+    ROCK(3, 16, 1000, 5, "rock"),
 
     ENTER(1, 0, 0, 0, "grass"),
     WALL(0, 0, 0, 0, "wall"),

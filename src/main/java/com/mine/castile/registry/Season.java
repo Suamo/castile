@@ -1,10 +1,10 @@
 package com.mine.castile.registry;
 
 public enum Season {
-    WINTER,
     SPRING,
     SUMMER,
-    FALL;
+    FALL,
+    WINTER;
 
     public Season getNextSeason() {
         switch (this) {
