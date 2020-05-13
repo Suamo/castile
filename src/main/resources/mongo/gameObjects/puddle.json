@@ -12,6 +12,7 @@
   "blocking": true,
   "actions": {
     "stepInto": {
+      "count": 1,
       "energyPerAction": 3,
       "delayPerAction": 200
     },
@@ -27,5 +28,5 @@
       "whenNoActionTransformsTo": "plain"
     }
   },
-  "evolution": "plain"
+  "evolutionToObject": "plain"
 }

@@ -18,6 +18,7 @@
       "whenNoActionTransformsTo": "plain"
     }
   },
+  "evolutionToObject": "plain",
   "seasonOverrides": {
     "spring": {
       "actions": {

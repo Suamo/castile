@@ -1,19 +1,26 @@
-package com.mine.castile.dom;
+package com.mine.castile.dom.entity;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class GameObjectAppear {
 
-    private int chance;
+    private Integer chance;
     private String replaceObjects;
 
-    public int getChance() {
+    public GameObjectAppear() {
+    }
+
+    public GameObjectAppear(Integer chance, String replaceObjects) {
+        this.chance = chance;
+        this.replaceObjects = replaceObjects;
+    }
+
+    public Integer getChance() {
         return chance;
     }
 
-    public void setChance(int chance) {
+    public void setChance(Integer chance) {
         this.chance = chance;
     }
 

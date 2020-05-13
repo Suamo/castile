@@ -16,7 +16,7 @@ public class GameObjectActionTypeDeserializer implements JsonDeserializer<GameOb
         GameObjectActionType[] scopes = GameObjectActionType.values();
         for (GameObjectActionType type : scopes)
         {
-            if (type.getIdentifier().equals(json.getAsString()))
+            if (type.name().equals(json.getAsString()))
                 return type;
         }
         return null;

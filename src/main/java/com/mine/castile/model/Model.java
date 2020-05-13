@@ -1,12 +1,11 @@
 package com.mine.castile.model;
 
-import com.mine.castile.registry.Season;
-import org.apache.commons.lang.Validate;
 import com.mine.castile.Constants;
+import com.mine.castile.dom.enums.Season;
 import com.mine.castile.listener.IModelListener;
 import com.mine.castile.listener.ModelEvent;
 import com.mine.castile.registry.Cell;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.apache.commons.lang.Validate;
 import org.springframework.stereotype.Component;
 
 import javax.swing.event.EventListenerList;
@@ -21,9 +20,9 @@ public class Model implements IModel {
     private Point enterLocation;
     private Season season;
 
-    public Model(Maze maze, MongoTemplate mongoTemplate) {
+    public Model(Maze maze) {
         this.maze = maze;
-        season = Season.SUMMER;
+        season = Season.summer;
         setup();
     }
 

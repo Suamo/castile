@@ -15,7 +15,7 @@ public class GameObjectAppearTypeDeserializer implements JsonDeserializer<GameOb
             throws JsonParseException {
         GameObjectAppearType[] scopes = GameObjectAppearType.values();
         for (GameObjectAppearType type : scopes) {
-            if (type.getIdentifier().equals(json.getAsString()))
+            if (type.name().equals(json.getAsString()))
                 return type;
         }
         return null;

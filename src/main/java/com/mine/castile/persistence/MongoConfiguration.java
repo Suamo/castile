@@ -1,8 +1,7 @@
-package com.mine.castile;
+package com.mine.castile.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mine.castile.dom.GameObject;
 import com.mine.castile.dom.deserializers.GameObjectActionTypeDeserializer;
 import com.mine.castile.dom.deserializers.GameObjectAppearTypeDeserializer;
 import com.mine.castile.dom.enums.GameObjectActionType;
@@ -22,18 +21,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 @Configuration
 public class MongoConfiguration {
-
-    public static final String GAME_OBJECTS_DIR =
-            "D:\\dev\\source\\castile\\src\\main\\resources\\mongo\\gameObjects";
 
     @Bean
     public IMongodConfig mongodConfig() throws IOException {
@@ -54,30 +45,9 @@ public class MongoConfiguration {
 
     @DependsOn("mongodExecutable")
     @Bean
-    public MongoTemplate mongoTemplate(Gson gson) throws IOException {
+    public MongoTemplate mongoTemplate() {
         MongoClient client = MongoClients.create("mongodb://localhost:27017");
-        MongoTemplate mongoTemplate = new MongoTemplate(client, "myDb");
-
-        loadData(gson, mongoTemplate);
-        return mongoTemplate;
-    }
-
-    private void loadData(Gson gson, MongoTemplate mongoTemplate) throws IOException {
-        mongoTemplate.dropCollection("gameObject");
-
-        File folder = new File(GAME_OBJECTS_DIR);
-        File[] files = Objects.requireNonNull(folder.listFiles());
-        for (final File fileEntry : files) {
-            if (!fileEntry.getName().endsWith(".json")) {
-                continue;
-            }
-            Path path = Paths.get(fileEntry.getAbsolutePath()).toAbsolutePath();
-            byte[] bytes = Files.readAllBytes(path);
-            String json = new String(bytes);
-            GameObject gameObject = gson.fromJson(json, GameObject.class);
-            mongoTemplate.insert(gameObject);
-        }
-        mongoTemplate.findAll(GameObject.class);
+        return new MongoTemplate(client, "myDb");
     }
 
     @Bean

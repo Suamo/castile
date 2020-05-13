@@ -2,7 +2,7 @@ package com.mine.castile.model;
 
 import com.mine.castile.listener.IModelListener;
 import com.mine.castile.registry.Cell;
-import com.mine.castile.registry.Season;
+import com.mine.castile.dom.enums.Season;
 
 import java.awt.*;
 

@@ -1,10 +1,12 @@
-package com.mine.castile.dom;
+package com.mine.castile.dom.entity;
 
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.dom.enums.GameObjectAppearType;
+import com.mine.castile.dom.enums.Season;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Document
@@ -12,9 +14,10 @@ public class GameObject {
 
     private @Id String _id;
     private Map<GameObjectAppearType, GameObjectAppear> appear;
-    private boolean blocking;
+    private Boolean blocking;
     private Map<GameObjectActionType, GameObjectAction> actions;
     private String evolutionToObject;
+    private Map<Season, GameObject> seasonOverrides;
 
     public String get_id() {
         return _id;
@@ -32,11 +35,11 @@ public class GameObject {
         this.appear = appear;
     }
 
-    public boolean isBlocking() {
+    public Boolean isBlocking() {
         return blocking;
     }
 
-    public void setBlocking(boolean blocking) {
+    public void setBlocking(Boolean blocking) {
         this.blocking = blocking;
     }
 
@@ -54,5 +57,13 @@ public class GameObject {
 
     public void setEvolutionToObject(String evolutionToObject) {
         this.evolutionToObject = evolutionToObject;
+    }
+
+    public Map<Season, GameObject> getSeasonOverrides() {
+        return seasonOverrides;
+    }
+
+    public void setSeasonOverrides(Map<Season, GameObject> seasonOverrides) {
+        this.seasonOverrides = seasonOverrides;
     }
 }

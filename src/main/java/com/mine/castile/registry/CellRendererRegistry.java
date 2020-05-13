@@ -1,5 +1,6 @@
 package com.mine.castile.registry;
 
+import com.mine.castile.dom.enums.Season;
 import com.mine.castile.renderer.ImageRenderer;
 
 import java.util.HashMap;
