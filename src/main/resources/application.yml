@@ -1,0 +1,18 @@
+logging:
+    file: castile.log
+
+game:
+    init:
+        season: "spring3"
+        map:
+            rows: 10
+            columns: 16
+        character:
+            coordinates: "1:6"
+        castile:
+            coordinates: "1:7"
+            size:
+                rows: 3
+                columns: 2
+    objects:
+        directory: "classpath*:/mongo/gameObjects/*.json"

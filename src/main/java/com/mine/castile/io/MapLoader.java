@@ -16,10 +16,10 @@ public class MapLoader {
     @Value("${game.init.castile.coordinates}")
     private String castileCoordinates;
 
-    @Value("${game.init.castile.sixe.rows}")
+    @Value("${game.init.castile.size.rows}")
     private int castileSizeRows;
 
-    @Value("${game.init.castile.sixe.columns}")
+    @Value("${game.init.castile.size.columns}")
     private int castileSizeColumns;
 
     private CellGenerator cellGenerator;
