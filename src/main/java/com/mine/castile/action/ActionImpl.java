@@ -48,6 +48,8 @@ public abstract class ActionImpl extends AbstractAction {
 
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
             delayAction(action);
+
+            model.getMan().reduceEnergy(action.getEnergyPerAction());
         }
     }
 

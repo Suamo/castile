@@ -37,7 +37,7 @@ public class GatherAction extends ActionImpl {
 
         System.out.println("Found some loot (TBD)"); // todo: implement loot
 
-        man.reduceEnerty(action.getEnergyPerAction());
+        man.reduceEnergy(action.getEnergyPerAction());
     }
 
     @Override
