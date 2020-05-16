@@ -5,19 +5,23 @@ import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.entity.GameObject;
 import com.mine.castile.dom.enums.Season;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.FileCopyUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Repository
 public class MongoRepository {
@@ -27,41 +31,49 @@ public class MongoRepository {
 
     private Gson gson;
     private MongoTemplate mongoTemplate;
+    private ResourceLoader resourceLoader;
 
     private Map<Season, Map<String, GameObjectDto>> cache;
 
-    public MongoRepository(Gson gson, MongoTemplate mongoTemplate) {
+    public MongoRepository(Gson gson, MongoTemplate mongoTemplate, ResourceLoader resourceLoader) {
         this.gson = gson;
         this.mongoTemplate = mongoTemplate;
+        this.resourceLoader = resourceLoader;
     }
 
     @PostConstruct
     private void loadData() throws IOException {
         mongoTemplate.dropCollection("gameObject");
 
-        File folder = new File(gameObjectsDirectory);
-        if (folder.exists()) {
-            loadFiles(folder);
-        }
-        folder = new File(getClass().getResource("/" + gameObjectsDirectory).getFile());
-        loadFiles(folder);
+        loadFiles();
 
         List<GameObject> objects = mongoTemplate.findAll(GameObject.class);
         cache = convertToDtos(objects);
     }
 
-    private void loadFiles(File folder) throws IOException {
-        File[] files = Objects.requireNonNull(folder.listFiles());
-        for (final File fileEntry : files) {
-            if (!fileEntry.getName().endsWith(".json")) {
-                continue;
-            }
-            Path path = Paths.get(fileEntry.getAbsolutePath()).toAbsolutePath();
-            byte[] bytes = Files.readAllBytes(path);
+    private void loadFiles() throws IOException {
+
+        Resource[] resources = loadResources(gameObjectsDirectory);
+
+        for (final Resource resource : resources) {
+            String file = asString(resource);
+            byte[] bytes = file.getBytes();
             String json = new String(bytes);
             GameObject gameObject = gson.fromJson(json, GameObject.class);
             mongoTemplate.insert(gameObject);
         }
+    }
+
+    private static String asString(Resource resource) {
+        try (Reader reader = new InputStreamReader(resource.getInputStream(), UTF_8)) {
+            return FileCopyUtils.copyToString(reader);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private Resource[] loadResources(String pattern) throws IOException {
+        return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
     }
 
     private Map<Season, Map<String, GameObjectDto>> convertToDtos(List<GameObject> objects) {

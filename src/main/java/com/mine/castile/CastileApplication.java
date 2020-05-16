@@ -3,6 +3,7 @@ package com.mine.castile;
 import com.mine.castile.listener.IModelListener;
 import com.mine.castile.listener.ModelEvent;
 import com.mine.castile.model.IModel;
+import de.flapdoodle.embed.process.distribution.BitSize;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,8 @@ import java.awt.*;
 public class CastileApplication {
 
     public static void main(String[] args) {
+        System.out.println("OS bits (mongo detect): " + BitSize.detect());
+        ;
         new SpringApplicationBuilder(CastileApplication.class)
                 .headless(false).run(args);
     }
@@ -33,6 +36,7 @@ public class CastileApplication {
     @Bean
     public JDialog inventory(JFrame frame, IModel model) {
         JLabel energyLaber = new JLabel("" + model.getMan().getEnergy());
+        JLabel seasonLaber = new JLabel(model.getSeason().name());
 
         model.addModelListaner(new IModelListener() {
             @Override
@@ -41,9 +45,11 @@ public class CastileApplication {
             }
         });
 
-        JPanel panel = new JPanel(new GridLayout(0,2));
-        panel.add(new JLabel("Energy"));
+        JPanel panel = new JPanel(new GridLayout(0, 2));
+        panel.add(new JLabel("Season"));
         panel.add(energyLaber);
+        panel.add(new JLabel("Energy"));
+        panel.add(seasonLaber);
         panel.setPreferredSize(new Dimension(400, 100));
 
 

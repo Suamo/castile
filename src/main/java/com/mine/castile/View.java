@@ -10,7 +10,10 @@ import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.listener.RefreshListener;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
-import com.mine.castile.registry.*;
+import com.mine.castile.registry.CellRendererRegistry;
+import com.mine.castile.registry.Direction;
+import com.mine.castile.registry.FrameRendererRegistry;
+import com.mine.castile.registry.ManRendererRegistry;
 import com.mine.castile.renderer.ImageRenderer;
 import org.apache.commons.lang.Validate;
 import org.springframework.stereotype.Component;
@@ -26,10 +29,13 @@ public class View extends JComponent {
 
     private IModel model;
     private CellRendererRegistry rendererRegistry;
+    private ManRendererRegistry manRendererRegistry;
 
-    public View(IModel model, CellRendererRegistry rendererRegistry) {
+    public View(IModel model, CellRendererRegistry rendererRegistry,
+                ManRendererRegistry manRendererRegistry) {
         this.model = model;
         this.rendererRegistry = rendererRegistry;
+        this.manRendererRegistry = manRendererRegistry;
 
         configureInputs();
         configureActions(model);
@@ -111,7 +117,7 @@ public class View extends JComponent {
         Man man = model.getMan();
         Direction direction = man.getDirection();
         int imageIndex = man.getImageIndex();
-        FrameRendererRegistry registry = ManRendererRegistry.getInstance().get(direction);
+        FrameRendererRegistry registry = manRendererRegistry.get(direction);
         ImageRenderer renderer = registry.get(imageIndex);
         renderer.render(g2, rect);
     }

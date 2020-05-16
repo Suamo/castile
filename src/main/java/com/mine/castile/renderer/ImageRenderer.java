@@ -1,9 +1,7 @@
 package com.mine.castile.renderer;
 
 import com.mine.castile.Constants;
-import com.mine.castile.dom.enums.Season;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,8 +13,10 @@ import java.io.InputStream;
 
 public class ImageRenderer {
     private String resource;
+    private ResourceLoader resourceLoader;
 
-    public ImageRenderer(String objectId, String folder) {
+    public ImageRenderer(String objectId, String folder, ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
         this.resource = String.format("image/%s/%s.png", folder, objectId);
     }
 
@@ -26,7 +26,7 @@ public class ImageRenderer {
             if (new File(resource).exists()) {
                 is = new FileInputStream(resource);
             } else {
-                is = getClass().getResourceAsStream("/" + resource);
+                is = resourceLoader.getResource("classpath:" + resource).getInputStream();
             }
             BufferedImage image = ImageIO.read(is);
             int x2 = rect.x + Constants.CELL_WIDTH;
