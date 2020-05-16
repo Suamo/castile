@@ -58,7 +58,5 @@ public abstract class ActionImpl extends AbstractAction {
 
     protected abstract void interactWithObject();
 
-    protected abstract void translate(Point point);
-
     protected abstract boolean withinMap(Point point);
 }

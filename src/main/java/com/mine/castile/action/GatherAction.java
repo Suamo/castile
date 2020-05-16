@@ -3,7 +3,6 @@ package com.mine.castile.action;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
-import com.mine.castile.registry.Direction;
 
 import java.awt.*;
 
@@ -22,11 +21,6 @@ public class GatherAction extends ActionImpl {
         System.out.println("Gathering the " + cell.get_id() + "...");
 
         model.getMan().setImageIndex(2);
-    }
-
-    @Override
-    protected void translate(Point point) {
-
     }
 
     @Override

@@ -18,11 +18,6 @@ public class DownAction extends ActionImpl {
     }
 
     @Override
-    protected void translate(Point point) {
-        point.translate(0, 1);
-    }
-
-    @Override
     protected boolean withinMap(Point point) {
         return point.y < model.getRows();
     }

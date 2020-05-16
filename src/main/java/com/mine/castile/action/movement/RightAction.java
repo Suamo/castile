@@ -18,11 +18,6 @@ public class RightAction extends ActionImpl {
     }
 
     @Override
-    protected void translate(Point point) {
-        point.translate(1, 0);
-    }
-
-    @Override
     protected boolean withinMap(Point point) {
         return point.x < model.getColumns();
     }

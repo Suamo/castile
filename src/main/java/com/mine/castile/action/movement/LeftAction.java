@@ -18,11 +18,6 @@ public class LeftAction extends ActionImpl {
     }
 
     @Override
-    protected void translate(Point point) {
-        point.translate(-1, 0);
-    }
-
-    @Override
     protected boolean withinMap(Point point) {
         return point.x >= 0;
     }
