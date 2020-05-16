@@ -80,8 +80,8 @@ public class GameObjectDto {
                 initial = initialObject.get(type);
             }
             if (overriddenObject == null || overriddenObject.get(type) == null) {
-                result.put(type, new GameObjectAction(initial.getCount(), initial.getDelayPerAction(),
-                        initial.getEnergyPerAction(), initial.getWhenNoActionTransformsTo()));
+                result.put(type, new GameObjectAction(initial.getCount(), initial.getEnergyPerAction(),
+                        initial.getDelayPerAction(), initial.getWhenNoActionTransformsTo()));
             } else {
                 GameObjectAction overridden = overriddenObject.get(type);
                 Integer count = defaultIfNull(overridden.getCount(), initial.getCount());

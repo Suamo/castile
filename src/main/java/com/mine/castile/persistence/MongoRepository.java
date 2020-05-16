@@ -37,7 +37,7 @@ public class MongoRepository {
     private void loadData() throws IOException {
         mongoTemplate.dropCollection("gameObject");
 
-        File folder = new File(gameObjectsDirectory);
+        File folder = new File(getClass().getResource(gameObjectsDirectory).getFile());
         File[] files = Objects.requireNonNull(folder.listFiles());
         for (final File fileEntry : files) {
             if (!fileEntry.getName().endsWith(".json")) {

@@ -1,6 +1,8 @@
 package com.mine.castile.action;
 
 import com.mine.castile.dom.dto.GameObjectDto;
+import com.mine.castile.dom.entity.GameObjectAction;
+import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
 import com.mine.castile.registry.Direction;
@@ -11,7 +13,7 @@ import java.awt.event.ActionEvent;
 
 public abstract class ActionImpl extends AbstractAction {
 
-    protected IModel model;
+    protected final IModel model;
 
     public ActionImpl(IModel model) {
         this.model = model;
@@ -31,8 +33,15 @@ public abstract class ActionImpl extends AbstractAction {
             man.setImageIndex((man.getImageIndex() + 1) % 2);
             man.setLocation(point);
             model.set(point.x, point.y, cell);
-            System.out.println("You've collected the " + cell.get_id());
             man.setImageIndex(2);
+
+            try {
+                GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
+                Integer delayPerAction = action.getDelayPerAction();
+                Thread.sleep(delayPerAction);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
 
         if (man.getEnergy() == 0) {

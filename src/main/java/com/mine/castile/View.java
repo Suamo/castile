@@ -58,19 +58,19 @@ public class View extends JComponent {
     private void configureInputs() {
         InputMap inputMap = getInputMap();
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_UP, 0), Direction.UP);
-        inputMap.put(getKeyStroke(KeyEvent.VK_W, 0), Direction.UP);
+        inputMap.put(getKeyStroke(KeyEvent.VK_UP, 0, true), Direction.UP);
+        inputMap.put(getKeyStroke(KeyEvent.VK_W, 0, true), Direction.UP);
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_LEFT, 0), Direction.LEFT);
-        inputMap.put(getKeyStroke(KeyEvent.VK_A, 0), Direction.LEFT);
+        inputMap.put(getKeyStroke(KeyEvent.VK_LEFT, 0, true), Direction.LEFT);
+        inputMap.put(getKeyStroke(KeyEvent.VK_A, 0, true), Direction.LEFT);
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_RIGHT, 0), Direction.RIGHT);
-        inputMap.put(getKeyStroke(KeyEvent.VK_D, 0), Direction.RIGHT);
+        inputMap.put(getKeyStroke(KeyEvent.VK_RIGHT, 0, true), Direction.RIGHT);
+        inputMap.put(getKeyStroke(KeyEvent.VK_D, 0, true), Direction.RIGHT);
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_DOWN, 0), Direction.DOWN);
-        inputMap.put(getKeyStroke(KeyEvent.VK_S, 0), Direction.DOWN);
+        inputMap.put(getKeyStroke(KeyEvent.VK_DOWN, 0, true), Direction.DOWN);
+        inputMap.put(getKeyStroke(KeyEvent.VK_S, 0, true), Direction.DOWN);
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0), "mark");
+        inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0, true), "mark");
     }
 
     private void configureActions(IModel model) {
