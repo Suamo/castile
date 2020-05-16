@@ -1,6 +1,9 @@
 package com.mine.castile.renderer;
 
 import com.mine.castile.Constants;
+import com.mine.castile.dom.enums.Season;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -11,8 +14,8 @@ import java.io.InputStream;
 public class ImageRenderer {
     private String resource;
 
-    public ImageRenderer(String resource) {
-        this.resource = resource;
+    public ImageRenderer(String objectId, String folder) {
+        this.resource = String.format("/image/%s/%s.png", folder, objectId);
     }
 
     public void render(Graphics2D g2, Rectangle rect) {

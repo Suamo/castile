@@ -1,16 +1,18 @@
 package com.mine.castile.model;
 
+import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.io.MapLoader;
 import org.apache.commons.lang.Validate;
-import com.mine.castile.registry.Cell;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Maze {
-    private Cell[][] cells;
+    public static final GameObjectDto VOID_OBJECT = GameObjectDto.createWithDefaults("void");
 
-    public Maze() {
-        Cell[][] cells = new MapLoader().load();
+    private GameObjectDto[][] cells;
+
+    public Maze(MapLoader mapLoader) {
+        GameObjectDto[][] cells = mapLoader.init();
         Validate.notNull(cells);
         Validate.isTrue(cells.length > 0);
         Validate.isTrue(cells[0].length > 0);
@@ -19,11 +21,14 @@ public class Maze {
         this.cells = cells;
     }
 
-    public Cell get(int row, int column) {
+    public GameObjectDto get(int row, int column) {
+        if (row < 0 || column < 0 || row >= cells[0].length || column >= cells.length) {
+            return VOID_OBJECT;
+        }
         return cells[column][row];
     }
 
-    public void set(int row, int column, Cell cell) {
+    public void set(int row, int column, GameObjectDto cell) {
         cells[column][row] = cell;
     }
 

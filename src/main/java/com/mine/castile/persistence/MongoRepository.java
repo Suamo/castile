@@ -26,7 +26,7 @@ public class MongoRepository {
     private Gson gson;
     private MongoTemplate mongoTemplate;
 
-    private Map<Season, GameObjectDto> cache;
+    private Map<Season, Map<String, GameObjectDto>> cache;
 
     public MongoRepository(Gson gson, MongoTemplate mongoTemplate) {
         this.gson = gson;
@@ -54,17 +54,19 @@ public class MongoRepository {
         cache = convertToDtos(objects);
     }
 
-    private Map<Season, GameObjectDto> convertToDtos(List<GameObject> objects) {
-        Map<Season, GameObjectDto> dtos = new HashMap<>();
+    private Map<Season, Map<String, GameObjectDto>> convertToDtos(List<GameObject> objects) {
+        Map<Season, Map<String, GameObjectDto>> dtos = new HashMap<>();
         for (GameObject object : objects) {
             for (Season season : Season.values()) {
-                dtos.put(season, new GameObjectDto(object, season));
+                Map<String, GameObjectDto> map = dtos.getOrDefault(season, new HashMap<>());
+                map.put(object.get_id(), new GameObjectDto(object, season));
+                dtos.put(season, map);
             }
         }
         return dtos;
     }
 
-    public Map<Season, GameObjectDto> getCache() {
-        return Collections.unmodifiableMap(cache);
+    public Map<Season, Map<String, GameObjectDto>> getCache() {
+        return cache;
     }
 }

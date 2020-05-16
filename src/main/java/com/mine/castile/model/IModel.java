@@ -1,14 +1,15 @@
 package com.mine.castile.model;
 
-import com.mine.castile.listener.IModelListener;
-import com.mine.castile.registry.Cell;
+import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.enums.Season;
+import com.mine.castile.listener.IModelListener;
 
 import java.awt.*;
 
 public interface IModel {
-    Cell get(int row, int column) throws IndexOutOfBoundsException;
-    void set(int row, int column, Cell cell) throws IndexOutOfBoundsException;
+    GameObjectDto get(int row, int column) throws IndexOutOfBoundsException;
+
+    void set(int row, int column, GameObjectDto cell) throws IndexOutOfBoundsException;
 
     int getRows();
 
@@ -17,10 +18,12 @@ public interface IModel {
     Rectangle getViewportRect();
 
     Man getMan();
+
     void setMan(Man man);
 
     void addModelListaner(IModelListener listener);
 
     Season getSeason();
+
     void nextSeason();
 }

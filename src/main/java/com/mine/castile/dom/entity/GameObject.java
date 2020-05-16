@@ -6,7 +6,6 @@ import com.mine.castile.dom.enums.Season;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Document
@@ -18,6 +17,13 @@ public class GameObject {
     private Map<GameObjectActionType, GameObjectAction> actions;
     private String evolutionToObject;
     private Map<Season, GameObject> seasonOverrides;
+
+    public GameObject() {
+    }
+
+    public GameObject(String _id) {
+        this._id = _id;
+    }
 
     public String get_id() {
         return _id;

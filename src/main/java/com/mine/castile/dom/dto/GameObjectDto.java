@@ -15,11 +15,15 @@ import java.util.Map;
 @Document
 public class GameObjectDto {
 
-    private @Id String _id;
+    private @Id
+    String _id;
     private Map<GameObjectAppearType, GameObjectAppear> appear;
     private boolean blocking;
     private Map<GameObjectActionType, GameObjectAction> actions;
     private String evolutionToObject;
+
+    public GameObjectDto() {
+    }
 
     public GameObjectDto(GameObject gameObject, Season season) {
         Map<Season, GameObject> overridesMap = gameObject.getSeasonOverrides();
@@ -41,9 +45,11 @@ public class GameObjectDto {
 
         for (GameObjectAppearType type : GameObjectAppearType.values()) {
 
-            GameObjectAppear initial = initialObject.get(type);
-            if (initial == null) {
-                initial = new GameObjectAppear();
+            GameObjectAppear initial;
+            if (initialObject == null || initialObject.get(type) == null) {
+                initial = new GameObjectAppear(0, "plain");
+            } else {
+                initial = initialObject.get(type);
             }
             if (overriddenObject == null || overriddenObject.get(type) == null) {
                 result.put(type, new GameObjectAppear(initial.getChance(), initial.getReplaceObjects()));
@@ -67,9 +73,11 @@ public class GameObjectDto {
 
         for (GameObjectActionType type : GameObjectActionType.values()) {
 
-            GameObjectAction initial = initialObject.get(type);
-            if (initial == null) {
+            GameObjectAction initial;
+            if (initialObject == null || initialObject.get(type) == null) {
                 initial = new GameObjectAction();
+            } else {
+                initial = initialObject.get(type);
             }
             if (overriddenObject == null || overriddenObject.get(type) == null) {
                 result.put(type, new GameObjectAction(initial.getCount(), initial.getDelayPerAction(),
@@ -132,5 +140,14 @@ public class GameObjectDto {
             return overr;
         }
         return init;
+    }
+
+    public static GameObjectDto createWithDefaults(String id) {
+        GameObjectDto dto = new GameObjectDto();
+        dto.set_id(id);
+        dto.setBlocking(true);
+        dto.setActions(new HashMap<>());
+        dto.setAppear(new HashMap<>());
+        return dto;
     }
 }

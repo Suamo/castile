@@ -1,13 +1,14 @@
 package com.mine.castile.model;
 
 import com.mine.castile.Constants;
+import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.enums.Season;
 import com.mine.castile.listener.IModelListener;
 import com.mine.castile.listener.ModelEvent;
-import com.mine.castile.registry.Cell;
-import org.apache.commons.lang.Validate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 
@@ -17,13 +18,19 @@ public class Model implements IModel {
 
     private Maze maze;
     private Man man;
-    private Point enterLocation;
     private Season season;
 
-    public Model(Maze maze) {
+    public Model(Maze maze,
+                 @Value("${game.init.season}") Season initialSeason,
+                 @Value("${game.init.character.coordinates}") String characterCoordinates) {
         this.maze = maze;
-        season = Season.summer;
-        setup();
+        this.season = initialSeason;
+        addCharacter(characterCoordinates);
+    }
+
+    private void addCharacter(String characterCoordinates) {
+        int[] coordinates = getCoordinates(characterCoordinates);
+        man = new Man(coordinates[0] - 1, coordinates[1] - 1);
     }
 
     public Man getMan() {
@@ -43,11 +50,11 @@ public class Model implements IModel {
         return new Rectangle(x, y, width, height);
     }
 
-    public Cell get(int row, int column) throws IndexOutOfBoundsException {
+    public GameObjectDto get(int row, int column) throws IndexOutOfBoundsException {
         return maze.get(row, column);
     }
 
-    public void set(int row, int column, Cell cell) throws IndexOutOfBoundsException {
+    public void set(int row, int column, GameObjectDto cell) throws IndexOutOfBoundsException {
         maze.set(row, column, cell);
     }
 
@@ -63,10 +70,6 @@ public class Model implements IModel {
         listenerList.add(IModelListener.class, listener);
     }
 
-    public void removeModelListener(IModelListener listener) {
-        listenerList.remove(IModelListener.class, listener);
-    }
-
     protected void fireModelChanged(ModelEvent e) {
         Object[] listeners = listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -76,19 +79,9 @@ public class Model implements IModel {
         }
     }
 
-    private void setup() {
-        int rows = maze.getRows();
-        int columns = maze.getColumns();
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                Cell cell = maze.get(column, row);
-                if (Cell.ENTER == cell) {
-                    enterLocation = new Point(column, row);
-                    man = new Man(column, row);
-                }
-            }
-        }
-        Validate.notNull(enterLocation, "Maze without ENTER");
+    private int[] getCoordinates(String characterCoordinates) {
+        String[] split = characterCoordinates.split(":");
+        return new int[]{Integer.parseInt(split[0]), Integer.parseInt(split[1])};
     }
 
     @Override
@@ -99,18 +92,6 @@ public class Model implements IModel {
     @Override
     public void nextSeason() {
         this.season = this.season.getNextSeason();
-
-        int rows = maze.getRows();
-        int columns = maze.getColumns();
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                Cell cell = maze.get(column, row);
-                if (Cell.ENTER == cell) {
-                    enterLocation = new Point(column, row);
-                    man = new Man(column, row);
-                }
-            }
-        }
         fireModelChanged(new ModelEvent(this));
         System.out.println("Its " + season.name() + " now!");
     }

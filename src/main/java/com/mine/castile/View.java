@@ -1,6 +1,9 @@
 package com.mine.castile;
 
 import com.mine.castile.action.*;
+import com.mine.castile.dom.dto.GameObjectDto;
+import com.mine.castile.dom.entity.GameObject;
+import com.mine.castile.dom.enums.Season;
 import com.mine.castile.listener.RefreshListener;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
@@ -17,10 +20,13 @@ import static javax.swing.KeyStroke.getKeyStroke;
 
 @Component
 public class View extends JComponent {
-    private IModel model;
 
-    public View(IModel model) {
+    private IModel model;
+    private CellRendererRegistry rendererRegistry;
+
+    public View(IModel model, CellRendererRegistry rendererRegistry) {
         this.model = model;
+        this.rendererRegistry = rendererRegistry;
 
         configureInputs();
         configureActions(model);
@@ -79,14 +85,9 @@ public class View extends JComponent {
         Point location = model.getViewportRect().getLocation();
         for (int row = location.y; row < location.y + 2 * Constants.VIEW_RADIX + 2; row++) {
             for (int column = location.x; column < location.x + 2 * Constants.VIEW_RADIX + 2; column++) {
-                Cell cell = Cell.VOID;
-                try {
-                    cell = model.get(column, row);
-                } catch (IndexOutOfBoundsException e) {
-                    // ok
-                }
-                ImageRenderer renderer = CellRendererRegistry.getInstance().get(model.getSeason(), cell);
-                Validate.notNull(renderer, "Renderer for map cell '" + cell + "' is not registered");
+                GameObjectDto cell = model.get(column, row);
+                ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.get_id());
+                Validate.notNull(renderer, "Renderer for map cell '" + cell.get_id() + "' is not registered");
                 int x = (column - location.x) * Constants.CELL_WIDTH;
                 int y = (row - location.y) * Constants.CELL_HEIGHT;
                 Rectangle rect = new Rectangle(x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT);

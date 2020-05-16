@@ -1,10 +1,10 @@
 package com.mine.castile.dom.enums;
 
 public enum Season {
-    spring,
-    summer,
-    fall,
-    winter;
+    spring1, spring2, spring3,
+    summer1, summer2, summer3,
+    fall1, fall2, fall3,
+    winter1, winter2, winter3;
 
     public Season getNextSeason() {
         int next = this.ordinal() + 1;

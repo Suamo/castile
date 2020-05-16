@@ -1,41 +1,40 @@
 package com.mine.castile.registry;
 
+import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.enums.Season;
+import com.mine.castile.persistence.MongoRepository;
 import com.mine.castile.renderer.ImageRenderer;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class CellRendererRegistry {
-    private static CellRendererRegistry instance = new CellRendererRegistry();
-    private Map<Season, Map<Cell, ImageRenderer>> map;
+    private Map<Season, Map<String, ImageRenderer>> map = new HashMap<>();
 
-    public static CellRendererRegistry getInstance() {
-        if (instance == null) {
-            instance = new CellRendererRegistry();
-        }
-        return instance;
+    private MongoRepository repository;
+
+    public CellRendererRegistry(MongoRepository repository) {
+        this.repository = repository;
+        createMap();
     }
 
-    public ImageRenderer get(Season season, Cell key) {
-        return map.get(season).get(key);
-    }
-
-    private CellRendererRegistry() {
-        map = createMap();
-    }
-
-    private Map<Season, Map<Cell, ImageRenderer>> createMap() {
-        Map<Season, Map<Cell, ImageRenderer>> map = new HashMap<>();
+    private void createMap() {
         for (Season season : Season.values()) {
             map.put(season, new HashMap<>());
         }
 
-        for (Cell cell : Cell.values()) {
-            for (Season season : Season.values()) {
-                map.get(season).put(cell, new ImageRenderer(cell.getImagePath(season)));
+        Map<Season, Map<String, GameObjectDto>> cache = repository.getCache();
+        for (Season season : cache.keySet()) {
+            for (String id : cache.get(season).keySet()) {
+                map.get(season).put(id, new ImageRenderer(id, season.name()));
             }
         }
-        return map;
+    }
+
+    public ImageRenderer get(Season season, String id) {
+        return map.get(season).get(id);
     }
 }

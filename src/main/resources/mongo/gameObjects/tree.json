@@ -20,7 +20,7 @@
   },
   "evolutionToObject": "plain",
   "seasonOverrides": {
-    "spring": {
+    "spring1": {
       "actions": {
         "gather": {
           "count": 3,

@@ -9,7 +9,7 @@
       "replaceObjects": "plain"
     }
   },
-  "blocking": true,
+  "blocking": false,
   "actions": {
     "stepInto": {
       "count": 1,

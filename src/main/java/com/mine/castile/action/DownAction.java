@@ -1,5 +1,6 @@
 package com.mine.castile.action;
 
+import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.model.IModel;
 import com.mine.castile.registry.Direction;
 
@@ -9,6 +10,11 @@ public class DownAction extends ActionImpl {
 
     public DownAction(IModel model) {
         super(model);
+    }
+
+    @Override
+    protected void interactWithObject(GameObjectDto cell) {
+
     }
 
     @Override
