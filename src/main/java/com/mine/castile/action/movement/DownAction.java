@@ -18,7 +18,7 @@ public class DownAction extends ActionImpl {
     }
 
     @Override
-    protected boolean withinMap(Point point) {
+    protected boolean isStepIntoPossible(Point point) {
         return point.y < model.getRows();
     }
 

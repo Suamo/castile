@@ -23,6 +23,8 @@ public class GameObjectDto {
     private String evolutionToObject;
 
     public GameObjectDto() {
+        appear = new HashMap<>();
+        actions = new HashMap<>();
     }
 
     public GameObjectDto(GameObject gameObject, Season season) {

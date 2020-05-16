@@ -73,7 +73,11 @@ public class Man {
     }
 
     public void setEnergy(int energy) {
-        System.out.println("ENergy now is " + energy);
         this.energy = energy;
+    }
+
+    public void reduceEnerty(int energySpent) {
+        energy = energy - energySpent;
+        System.out.println("Energy now is " + energy);
     }
 }

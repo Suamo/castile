@@ -18,7 +18,7 @@ public class RightAction extends ActionImpl {
     }
 
     @Override
-    protected boolean withinMap(Point point) {
+    protected boolean isStepIntoPossible(Point point) {
         return point.x < model.getColumns();
     }
 }

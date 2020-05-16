@@ -42,21 +42,25 @@ public abstract class ActionImpl extends AbstractAction {
         Point point = man.getDirectionLocation();
         GameObjectDto cell = model.get(point.x, point.y);
 
-        if (withinMap(point) && cell != null && !cell.isBlocking()) {
+        if (isStepIntoPossible(point) && !cell.isBlocking()) {
             man.setImageIndex((man.getImageIndex() + 1) % 2);
             man.setLocation(point);
 
-            try {
-                GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
-                Integer delayPerAction = action.getDelayPerAction();
-                Thread.sleep(delayPerAction);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
+            delayAction(action);
+        }
+    }
+
+    protected void delayAction(GameObjectAction action) {
+        try {
+            Integer delayPerAction = action.getDelayPerAction();
+            Thread.sleep(delayPerAction);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 
     protected abstract void interactWithObject();
 
-    protected abstract boolean withinMap(Point point);
+    protected abstract boolean isStepIntoPossible(Point point);
 }

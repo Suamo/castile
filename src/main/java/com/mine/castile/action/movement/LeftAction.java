@@ -18,7 +18,7 @@ public class LeftAction extends ActionImpl {
     }
 
     @Override
-    protected boolean withinMap(Point point) {
+    protected boolean isStepIntoPossible(Point point) {
         return point.x >= 0;
     }
 

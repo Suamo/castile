@@ -1,6 +1,8 @@
 package com.mine.castile.action;
 
 import com.mine.castile.dom.dto.GameObjectDto;
+import com.mine.castile.dom.entity.GameObjectAction;
+import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
 
@@ -15,17 +17,32 @@ public class GatherAction extends ActionImpl {
     @Override
     protected void interactWithObject() {
         Man man = model.getMan();
+        man.setImageIndex(2);
+
         Point directionLocation = man.getDirectionLocation();
         GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
 
         System.out.println("Gathering the " + cell.get_id() + "...");
+        GameObjectAction action = cell.getActions().get(GameObjectActionType.gather);
+        if (action == null || action.getCount() == 0) {
+            System.out.println("Nothing to gather");
+            return;
+        }
 
-        model.getMan().setImageIndex(2);
+        delayAction(action);
+
+        Integer count = action.getCount();
+        System.out.println("Changed gathering count from " + count + " to " + --count);
+        action.setCount(count);
+
+        System.out.println("Found some loot (TBD)"); // todo: implement loot
+
+        man.reduceEnerty(action.getEnergyPerAction());
     }
 
     @Override
-    protected boolean withinMap(Point point) {
-        return point.y < model.getRows();
+    protected boolean isStepIntoPossible(Point point) {
+        return false;
     }
 
 }
