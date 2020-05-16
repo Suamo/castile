@@ -13,6 +13,6 @@ game:
             coordinates: "1:7"
             size:
                 rows: 3
-                columns: 2
+                columns: 4
     objects:
         directory: "classpath*:/mongo/gameObjects/*.json"

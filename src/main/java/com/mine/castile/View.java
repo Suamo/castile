@@ -15,7 +15,6 @@ import com.mine.castile.registry.Direction;
 import com.mine.castile.registry.FrameRendererRegistry;
 import com.mine.castile.registry.ManRendererRegistry;
 import com.mine.castile.renderer.ImageRenderer;
-import org.apache.commons.lang.Validate;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -37,6 +36,7 @@ public class View extends JComponent {
         this.rendererRegistry = rendererRegistry;
         this.manRendererRegistry = manRendererRegistry;
 
+        cacheMap();
         configureInputs();
         configureActions(model);
         configureListeners(model);
@@ -49,8 +49,15 @@ public class View extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.fillRect(0, 0, width, height);
 
+        long start = System.currentTimeMillis();
         drawMap(g2);
+        long end = System.currentTimeMillis();
+        System.out.println("Drawing map: " + (end - start));
+
+        start = System.currentTimeMillis();
         drawMan(g2);
+        end = System.currentTimeMillis();
+        System.out.println("Drawing man: " + (end - start));
     }
 
     public Dimension getPreferredSize() {
@@ -93,13 +100,25 @@ public class View extends JComponent {
         actionMap.put("hit", new HitAction(model));
     }
 
+    private void cacheMap() {
+//        for (int row = 0; row < model.getRows(); row++) {
+//            for (int column = 0; column < model.getColumns(); column++) {
+//                GameObjectDto cell = model.get(column, row);
+//                ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.get_id());
+//                int x = (column - location.x) * Constants.CELL_WIDTH;
+//                int y = (row - location.y) * Constants.CELL_HEIGHT;
+//                Rectangle rect = new Rectangle(x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT);
+//                renderer.render(g2, rect);
+//            }
+//        }
+    }
+
     private void drawMap(Graphics2D g2) {
         Point location = model.getViewportRect().getLocation();
         for (int row = location.y; row < location.y + 2 * Constants.VIEW_RADIX + 2; row++) {
             for (int column = location.x; column < location.x + 2 * Constants.VIEW_RADIX + 2; column++) {
                 GameObjectDto cell = model.get(column, row);
                 ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.get_id());
-                Validate.notNull(renderer, "Renderer for map cell '" + cell.get_id() + "' is not registered");
                 int x = (column - location.x) * Constants.CELL_WIDTH;
                 int y = (row - location.y) * Constants.CELL_HEIGHT;
                 Rectangle rect = new Rectangle(x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT);
