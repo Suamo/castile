@@ -10,7 +10,7 @@
     "stepInto": {
       "count": 1,
       "energyPerAction": 1,
-      "delayPerAction": 500
+      "delayPerAction": 50
     }
   },
   "evolutionToObject": "plain"

@@ -10,7 +10,7 @@ public class RefreshListener implements IModelListener {
     }
 
     public void modelChanged(ModelEvent e) {
-        view.revalidate(); // todo: is needed?
+//        view.revalidate(); // todo: is needed?
         view.paintImmediately(0, 0, view.getWidth(), view.getHeight()); // instead of async repaint()
     }
 }

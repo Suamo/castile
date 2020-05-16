@@ -43,9 +43,8 @@ public abstract class ActionImpl extends AbstractAction {
         GameObjectDto cell = model.get(point.x, point.y);
 
         if (withinMap(point) && cell != null && !cell.isBlocking()) {
-//            man.setImageIndex((man.getImageIndex() + 1) % 2);
+            man.setImageIndex((man.getImageIndex() + 1) % 2);
             man.setLocation(point);
-            model.set(point.y, point.x, cell); // todo: check the need
 
             try {
                 GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
