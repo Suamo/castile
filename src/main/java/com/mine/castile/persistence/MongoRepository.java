@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.entity.GameObject;
 import com.mine.castile.dom.enums.Season;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,7 +14,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class MongoRepository {
@@ -37,7 +39,18 @@ public class MongoRepository {
     private void loadData() throws IOException {
         mongoTemplate.dropCollection("gameObject");
 
-        File folder = new File(getClass().getResource(gameObjectsDirectory).getFile());
+        File folder = new File(gameObjectsDirectory);
+        if (folder.exists()) {
+            loadFiles(folder);
+        }
+        folder = new File(getClass().getResource("/" + gameObjectsDirectory).getFile());
+        loadFiles(folder);
+
+        List<GameObject> objects = mongoTemplate.findAll(GameObject.class);
+        cache = convertToDtos(objects);
+    }
+
+    private void loadFiles(File folder) throws IOException {
         File[] files = Objects.requireNonNull(folder.listFiles());
         for (final File fileEntry : files) {
             if (!fileEntry.getName().endsWith(".json")) {
@@ -49,9 +62,6 @@ public class MongoRepository {
             GameObject gameObject = gson.fromJson(json, GameObject.class);
             mongoTemplate.insert(gameObject);
         }
-
-        List<GameObject> objects = mongoTemplate.findAll(GameObject.class);
-        cache = convertToDtos(objects);
     }
 
     private Map<Season, Map<String, GameObjectDto>> convertToDtos(List<GameObject> objects) {
