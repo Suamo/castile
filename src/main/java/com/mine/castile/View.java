@@ -49,15 +49,8 @@ public class View extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.fillRect(0, 0, width, height);
 
-        long start = System.currentTimeMillis();
         drawMap(g2);
-        long end = System.currentTimeMillis();
-        System.out.println("Drawing map: " + (end - start));
-
-        start = System.currentTimeMillis();
         drawMan(g2);
-        end = System.currentTimeMillis();
-        System.out.println("Drawing man: " + (end - start));
     }
 
     public Dimension getPreferredSize() {
