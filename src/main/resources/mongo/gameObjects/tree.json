@@ -11,6 +11,11 @@
   },
   "blocking": false,
   "actions": {
+    "stepInto": {
+      "count": 1,
+      "energyPerAction": 1,
+      "delayPerAction": 500
+    },
     "hits": {
       "count": 3,
       "energyPerAction": 3,

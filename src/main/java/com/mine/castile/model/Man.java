@@ -48,6 +48,21 @@ public class Man {
         return new Point(column, row);
     }
 
+    public Point getDirectionLocation() {
+        switch (direction){
+            case UP:
+                return new Point(column, row - 1);
+            case LEFT:
+                return new Point(column - 1, row);
+            case RIGHT:
+                return new Point(column + 1, row);
+            case DOWN:
+                return new Point(column, row + 1);
+            default:
+                throw new UnsupportedOperationException(direction.getName() + " is not configured");
+        }
+    }
+
     public void setLocation(Point location) {
         column = location.x;
         row = location.y;

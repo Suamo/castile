@@ -22,18 +22,30 @@ public abstract class ActionImpl extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         Man man = model.getMan();
-        Point point = man.getLocation();
-        translate(point); // moves character to new position
-        man.setDirection(getDirection());
+        interactWithObject();
 
+        if (man.getEnergy() == 0) {
+            man.setEnergy(Man.ENERRY_BASE);
+            model.nextSeason();
+        }
+        model.setMan(man);
+    }
+
+    protected void proceedToDirection(Direction direction) {
+        Direction oldDirection = model.getMan().getDirection();
+        model.getMan().setDirection(direction);
+        if (oldDirection != direction) {
+            return; // just change direction without movement
+        }
+
+        Man man = model.getMan();
+        Point point = man.getDirectionLocation();
         GameObjectDto cell = model.get(point.x, point.y);
 
         if (withinMap(point) && cell != null && !cell.isBlocking()) {
-            interactWithObject(cell);
-            man.setImageIndex((man.getImageIndex() + 1) % 2);
+//            man.setImageIndex((man.getImageIndex() + 1) % 2);
             man.setLocation(point);
-            model.set(point.x, point.y, cell);
-            man.setImageIndex(2);
+            model.set(point.y, point.x, cell); // todo: check the need
 
             try {
                 GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
@@ -43,17 +55,9 @@ public abstract class ActionImpl extends AbstractAction {
                 ex.printStackTrace();
             }
         }
-
-        if (man.getEnergy() == 0) {
-            man.setEnergy(Man.ENERRY_BASE);
-            model.nextSeason();
-        }
-        model.setMan(man);
     }
 
-    protected abstract void interactWithObject(GameObjectDto cell);
-
-    protected abstract Direction getDirection();
+    protected abstract void interactWithObject();
 
     protected abstract void translate(Point point);
 

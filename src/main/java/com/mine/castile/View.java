@@ -1,9 +1,12 @@
 package com.mine.castile;
 
-import com.mine.castile.action.*;
+import com.mine.castile.action.GatherAction;
+import com.mine.castile.action.HitAction;
+import com.mine.castile.action.movement.DownAction;
+import com.mine.castile.action.movement.LeftAction;
+import com.mine.castile.action.movement.RightAction;
+import com.mine.castile.action.movement.UpAction;
 import com.mine.castile.dom.dto.GameObjectDto;
-import com.mine.castile.dom.entity.GameObject;
-import com.mine.castile.dom.enums.Season;
 import com.mine.castile.listener.RefreshListener;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
@@ -70,7 +73,8 @@ public class View extends JComponent {
         inputMap.put(getKeyStroke(KeyEvent.VK_DOWN, 0, true), Direction.DOWN);
         inputMap.put(getKeyStroke(KeyEvent.VK_S, 0, true), Direction.DOWN);
 
-        inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0, true), "mark");
+        inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0, true), "gather");
+        inputMap.put(getKeyStroke(KeyEvent.VK_ALT, 0, true), "hit");
     }
 
     private void configureActions(IModel model) {
@@ -79,6 +83,8 @@ public class View extends JComponent {
         actionMap.put(Direction.LEFT, new LeftAction(model));
         actionMap.put(Direction.RIGHT, new RightAction(model));
         actionMap.put(Direction.DOWN, new DownAction(model));
+        actionMap.put("gather", new GatherAction(model));
+        actionMap.put("hit", new HitAction(model));
     }
 
     private void drawMap(Graphics2D g2) {

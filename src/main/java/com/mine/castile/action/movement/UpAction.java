@@ -1,5 +1,6 @@
-package com.mine.castile.action;
+package com.mine.castile.action.movement;
 
+import com.mine.castile.action.ActionImpl;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.model.IModel;
 import com.mine.castile.registry.Direction;
@@ -13,13 +14,8 @@ public class UpAction extends ActionImpl {
     }
 
     @Override
-    protected void interactWithObject(GameObjectDto cell) {
-
-    }
-
-    @Override
-    protected Direction getDirection() {
-        return Direction.UP;
+    protected void interactWithObject() {
+        proceedToDirection(Direction.UP);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class Model implements IModel {
 
     private void addCharacter(String characterCoordinates) {
         int[] coordinates = getCoordinates(characterCoordinates);
-        man = new Man(coordinates[0] - 1, coordinates[1] - 1);
+        man = new Man(coordinates[1] - 1, coordinates[0] - 1);
     }
 
     public Man getMan() {

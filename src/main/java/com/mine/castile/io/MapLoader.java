@@ -36,8 +36,8 @@ public class MapLoader {
             }
         }
         String[] coordinates = castileCoordinates.split(":");
-        int x = Integer.parseInt(coordinates[0]) - 1;
-        int y = Integer.parseInt(coordinates[1]) - 1;
+        int y = Integer.parseInt(coordinates[0]) - 1;
+        int x = Integer.parseInt(coordinates[1]) - 1;
 
         for (int row = y; row < y + castileSizeRows; row++) {
             for (int column = x; column < x + castileSizeColumns; column++) {
