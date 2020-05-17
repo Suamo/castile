@@ -22,10 +22,10 @@ public class ManRendererRegistry {
 
     private Map<Direction, FrameRendererRegistry> createMap() {
         Map<Direction, FrameRendererRegistry> map = new HashMap<Direction, FrameRendererRegistry>();
-        map.put(Direction.UP, new FrameRendererRegistry("up", resourceLoader));
-        map.put(Direction.DOWN, new FrameRendererRegistry("down", resourceLoader));
-        map.put(Direction.LEFT, new FrameRendererRegistry("left", resourceLoader));
-        map.put(Direction.RIGHT, new FrameRendererRegistry("right", resourceLoader));
+        map.put(Direction.UP, new FrameRendererRegistry(Direction.UP, resourceLoader));
+        map.put(Direction.DOWN, new FrameRendererRegistry(Direction.DOWN, resourceLoader));
+        map.put(Direction.LEFT, new FrameRendererRegistry(Direction.LEFT, resourceLoader));
+        map.put(Direction.RIGHT, new FrameRendererRegistry(Direction.RIGHT, resourceLoader));
         return map;
     }
 }

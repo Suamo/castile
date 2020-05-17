@@ -31,7 +31,7 @@ public class CellRendererRegistry {
         Map<Season, Map<String, GameObjectDto>> cache = repository.getCache();
         for (Season season : cache.keySet()) {
             for (String id : cache.get(season).keySet()) {
-                map.get(season).put(id, new ImageRenderer(id, season.name(), resourceLoader));
+                map.get(season).put(id, new ImageRenderer(id, "objects", resourceLoader));
             }
         }
     }

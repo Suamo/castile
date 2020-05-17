@@ -9,11 +9,11 @@ import java.util.Map;
 public class FrameRendererRegistry {
     private final Map<Integer, ImageRenderer> map;
 
-    public FrameRendererRegistry(String suffix, ResourceLoader resourceLoader) {
+    public FrameRendererRegistry(Direction direction, ResourceLoader resourceLoader) {
         map = new HashMap<>();
-        map.put(0, new ImageRenderer(suffix + "_0", "char", resourceLoader));
-        map.put(1, new ImageRenderer(suffix + "_1", "char", resourceLoader));
-        map.put(2, new ImageRenderer(suffix + "_2", "char", resourceLoader));
+        map.put(0, new ImageRenderer("char", "char", resourceLoader, 0, direction.getSpritePosition()));
+        map.put(1, new ImageRenderer("char", "char", resourceLoader, 1, direction.getSpritePosition()));
+        map.put(2, new ImageRenderer("char", "char", resourceLoader, 2, direction.getSpritePosition()));
     }
 
     public ImageRenderer get(Integer key) {
