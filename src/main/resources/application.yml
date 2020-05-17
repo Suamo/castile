@@ -16,4 +16,6 @@ game:
                 columns: 4
     objects:
         descriptors: "classpath*:/descriptors/*.json"
+        loot: "classpath*:/loot/*.json"
+        lootMapping: "classpath*:/loot-mapping/*.json"
         images: "classpath*:/images/*.png"

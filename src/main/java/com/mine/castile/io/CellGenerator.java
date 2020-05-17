@@ -20,7 +20,7 @@ public class CellGenerator {
     private Map<Season, Map<String, GameObjectDto>> cache;
 
     public CellGenerator(MongoRepository repository) {
-        cache = repository.getCache();
+        cache = repository.getObjectsCache();
     }
 
     public GameObjectDto generateCell() {

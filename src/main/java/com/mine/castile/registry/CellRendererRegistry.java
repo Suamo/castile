@@ -29,7 +29,7 @@ public class CellRendererRegistry {
             map.put(season, new HashMap<>());
         }
 
-        Map<Season, Map<String, GameObjectDto>> cache = repository.getCache();
+        Map<Season, Map<String, GameObjectDto>> cache = repository.getObjectsCache();
         for (Season season : cache.keySet()) {
             for (String id : cache.get(season).keySet()) {
                 Map<String, Resource> images = resourceLoader.getImages();

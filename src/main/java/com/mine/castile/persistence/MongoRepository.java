@@ -3,6 +3,8 @@ package com.mine.castile.persistence;
 import com.google.gson.Gson;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.entity.GameObject;
+import com.mine.castile.dom.entity.Loot;
+import com.mine.castile.dom.entity.LootMapping;
 import com.mine.castile.dom.enums.Season;
 import com.mine.castile.renderer.CastileResourceLoader;
 import org.springframework.core.io.Resource;
@@ -29,7 +31,9 @@ public class MongoRepository {
     private MongoTemplate mongoTemplate;
     private CastileResourceLoader resourceLoader;
 
-    private Map<Season, Map<String, GameObjectDto>> cache;
+    private Map<Season, Map<String, GameObjectDto>> objectsCache;
+    private Map<Season, Map<String, Loot>> lootCache;
+    private Map<Season, Map<String, LootMapping>> lootMappingCache;
 
     public MongoRepository(Gson gson, MongoTemplate mongoTemplate, CastileResourceLoader resourceLoader) {
         this.gson = gson;
@@ -38,24 +42,31 @@ public class MongoRepository {
     }
 
     @PostConstruct
-    private void loadData() throws IOException {
+    private void loadData() {
         mongoTemplate.dropCollection("gameObject");
+        mongoTemplate.dropCollection("loot");
+        mongoTemplate.dropCollection("lootMapping");
 
-        loadFiles();
+        uploadFilesToMongo(GameObject.class, resourceLoader.getDescriptors().values());
+        uploadFilesToMongo(Loot.class, resourceLoader.getLoot().values());
+        uploadFilesToMongo(LootMapping.class, resourceLoader.getLootMapping().values());
 
         List<GameObject> objects = mongoTemplate.findAll(GameObject.class);
-        cache = convertToDtos(objects);
+        objectsCache = objectsToDtos(objects);
+
+        List<Loot> loot = mongoTemplate.findAll(Loot.class);
+        lootCache = lootToDtos(loot);
+
+        List<LootMapping> lootMapping = mongoTemplate.findAll(LootMapping.class);
+        lootMappingCache = lootMappingToDtos(lootMapping);
     }
 
-    private void loadFiles() throws IOException {
-
-        Collection<Resource> resources = resourceLoader.getDescriptors().values();
-
+    private <T> void uploadFilesToMongo(Class<T> clazz, Collection<Resource> resources) {
         for (final Resource resource : resources) {
             String file = asString(resource);
             byte[] bytes = file.getBytes();
             String json = new String(bytes);
-            GameObject gameObject = gson.fromJson(json, GameObject.class);
+            T gameObject = gson.fromJson(json, clazz);
             mongoTemplate.insert(gameObject);
         }
     }
@@ -68,19 +79,51 @@ public class MongoRepository {
         }
     }
 
-    private Map<Season, Map<String, GameObjectDto>> convertToDtos(List<GameObject> objects) {
+    private Map<Season, Map<String, GameObjectDto>> objectsToDtos(List<GameObject> entities) {
         Map<Season, Map<String, GameObjectDto>> dtos = new HashMap<>();
-        for (GameObject object : objects) {
+        for (GameObject entity : entities) {
             for (Season season : Season.values()) {
                 Map<String, GameObjectDto> map = dtos.getOrDefault(season, new HashMap<>());
-                map.put(object.get_id(), new GameObjectDto(object, season));
+                map.put(entity.get_id(), new GameObjectDto(entity, season));
                 dtos.put(season, map);
             }
         }
         return dtos;
     }
 
-    public Map<Season, Map<String, GameObjectDto>> getCache() {
-        return cache;
+    private Map<Season, Map<String, Loot>> lootToDtos(List<Loot> entities) {
+        Map<Season, Map<String, Loot>> dtos = new HashMap<>();
+        for (Loot entity : entities) {
+            for (Season season : Season.values()) {
+                Map<String, Loot> map = dtos.getOrDefault(season, new HashMap<>());
+                map.put(entity.get_id(), entity);
+                dtos.put(season, map);
+            }
+        }
+        return dtos;
+    }
+
+    private Map<Season, Map<String, LootMapping>> lootMappingToDtos(List<LootMapping> entities) {
+        Map<Season, Map<String, LootMapping>> dtos = new HashMap<>();
+        for (LootMapping entity : entities) {
+            for (Season season : Season.values()) {
+                Map<String, LootMapping> map = dtos.getOrDefault(season, new HashMap<>());
+                map.put(entity.get_id(), entity);
+                dtos.put(season, map);
+            }
+        }
+        return dtos;
+    }
+
+    public Map<Season, Map<String, GameObjectDto>> getObjectsCache() {
+        return objectsCache;
+    }
+
+    public Map<Season, Map<String, Loot>> getLootCache() {
+        return lootCache;
+    }
+
+    public Map<Season, Map<String, LootMapping>> getLootMappingCache() {
+        return lootMappingCache;
     }
 }
