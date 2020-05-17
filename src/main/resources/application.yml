@@ -15,4 +15,5 @@ game:
                 rows: 3
                 columns: 4
     objects:
-        directory: "classpath*:/mongo/gameObjects/*.json"
+        descriptors: "classpath*:/descriptors/*.json"
+        images: "classpath*:/images/*.png"

@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.entity.GameObject;
 import com.mine.castile.dom.enums.Season;
-import org.springframework.beans.factory.annotation.Value;
+import com.mine.castile.renderer.CastileResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.FileCopyUtils;
@@ -17,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UncheckedIOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +25,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Repository
 public class MongoRepository {
 
-    @Value("${game.objects.directory}")
-    private String gameObjectsDirectory;
-
     private Gson gson;
     private MongoTemplate mongoTemplate;
-    private ResourceLoader resourceLoader;
+    private CastileResourceLoader resourceLoader;
 
     private Map<Season, Map<String, GameObjectDto>> cache;
 
-    public MongoRepository(Gson gson, MongoTemplate mongoTemplate, ResourceLoader resourceLoader) {
+    public MongoRepository(Gson gson, MongoTemplate mongoTemplate, CastileResourceLoader resourceLoader) {
         this.gson = gson;
         this.mongoTemplate = mongoTemplate;
         this.resourceLoader = resourceLoader;
@@ -53,7 +49,7 @@ public class MongoRepository {
 
     private void loadFiles() throws IOException {
 
-        Resource[] resources = loadResources(gameObjectsDirectory);
+        Collection<Resource> resources = resourceLoader.getDescriptors().values();
 
         for (final Resource resource : resources) {
             String file = asString(resource);
@@ -70,10 +66,6 @@ public class MongoRepository {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    private Resource[] loadResources(String pattern) throws IOException {
-        return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
     }
 
     private Map<Season, Map<String, GameObjectDto>> convertToDtos(List<GameObject> objects) {

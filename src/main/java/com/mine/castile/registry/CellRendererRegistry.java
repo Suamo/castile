@@ -3,8 +3,9 @@ package com.mine.castile.registry;
 import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.dom.enums.Season;
 import com.mine.castile.persistence.MongoRepository;
+import com.mine.castile.renderer.CastileResourceLoader;
 import com.mine.castile.renderer.ImageRenderer;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,9 +16,9 @@ public class CellRendererRegistry {
     private Map<Season, Map<String, ImageRenderer>> map = new HashMap<>();
 
     private MongoRepository repository;
-    private ResourceLoader resourceLoader;
+    private CastileResourceLoader resourceLoader;
 
-    public CellRendererRegistry(MongoRepository repository, ResourceLoader resourceLoader) {
+    public CellRendererRegistry(MongoRepository repository, CastileResourceLoader resourceLoader) {
         this.repository = repository;
         this.resourceLoader = resourceLoader;
         createMap();
@@ -31,7 +32,9 @@ public class CellRendererRegistry {
         Map<Season, Map<String, GameObjectDto>> cache = repository.getCache();
         for (Season season : cache.keySet()) {
             for (String id : cache.get(season).keySet()) {
-                map.get(season).put(id, new ImageRenderer(id, "objects", resourceLoader));
+                Map<String, Resource> images = resourceLoader.getImages();
+                Resource resource = images.get(id);
+                map.get(season).put(id, new ImageRenderer(resource));
             }
         }
     }

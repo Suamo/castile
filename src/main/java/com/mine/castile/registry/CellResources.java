@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class CellResources {
     private Resource bush;
 
-    public CellResources(@Value("classpath:image/fall/bush.png") Resource bush) {
+    public CellResources(@Value("classpath:images/fall/bush.png") Resource bush) {
         this.bush = bush;
     }
 

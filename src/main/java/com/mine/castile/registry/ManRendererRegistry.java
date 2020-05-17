@@ -1,6 +1,6 @@
 package com.mine.castile.registry;
 
-import org.springframework.core.io.ResourceLoader;
+import com.mine.castile.renderer.CastileResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -9,9 +9,9 @@ import java.util.Map;
 @Component
 public class ManRendererRegistry {
     private Map<Direction, FrameRendererRegistry> map;
-    private ResourceLoader resourceLoader;
+    private CastileResourceLoader resourceLoader;
 
-    private ManRendererRegistry(ResourceLoader resourceLoader) {
+    private ManRendererRegistry(CastileResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
         map = createMap();
     }

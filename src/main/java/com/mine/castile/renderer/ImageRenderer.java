@@ -1,6 +1,6 @@
 package com.mine.castile.renderer;
 
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.Resource;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,14 +17,12 @@ public class ImageRenderer {
     private int spriteRow;
     private int spriteColumn;
 
-    public ImageRenderer(String objectId, String folder, ResourceLoader resourceLoader,
-                         int spriteRow, int spriteColumn) {
+    public ImageRenderer(Resource resource, int spriteRow, int spriteColumn) {
         this.spriteRow = spriteRow;
         this.spriteColumn = spriteColumn;
 
-        String resource = String.format("image/%s/%s.png", folder, objectId);
         try {
-            InputStream is = resourceLoader.getResource("classpath:" + resource).getInputStream();
+            InputStream is = resource.getInputStream();
             BufferedImage image = ImageIO.read(is);
 
             spriteSheet = new SpriteSheetBuilder().
@@ -37,8 +35,8 @@ public class ImageRenderer {
         }
     }
 
-    public ImageRenderer(String objectId, String folder, ResourceLoader resourceLoader) {
-        this(objectId, folder, resourceLoader, 0, 0);
+    public ImageRenderer(Resource resource) {
+        this(resource, 0, 0);
     }
 
     public void render(Graphics2D g2, Rectangle rect) {
