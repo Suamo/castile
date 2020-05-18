@@ -6,17 +6,13 @@ import com.mine.castile.dom.entity.objects.GameObjectAppear;
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.dom.enums.GameObjectAppearType;
 import com.mine.castile.dom.enums.Season;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Document
 public class GameObjectDto {
 
-    private @Id
-    String _id;
+    private String _id;
     private Map<GameObjectAppearType, GameObjectAppear> appear;
     private boolean blocking;
     private Map<GameObjectActionType, GameObjectAction> actions;
@@ -25,6 +21,33 @@ public class GameObjectDto {
     public GameObjectDto() {
         appear = new HashMap<>();
         actions = new HashMap<>();
+    }
+
+    public GameObjectDto(GameObjectDto dto) {
+        _id = dto.get_id();
+        appear = copyAppear(dto.appear);
+        blocking = dto.isBlocking();
+        actions = copyActions(dto.actions);
+        evolutionToObject = dto.evolutionToObject;
+    }
+
+    private Map<GameObjectAppearType, GameObjectAppear> copyAppear(Map<GameObjectAppearType, GameObjectAppear> oldMap) {
+        Map<GameObjectAppearType, GameObjectAppear> map = new HashMap<>();
+        for (GameObjectAppearType type : oldMap.keySet()) {
+            GameObjectAppear value = oldMap.get(type);
+            map.put(type, new GameObjectAppear(value.getChance(), value.getReplaceObjects()));
+        }
+        return map;
+    }
+
+    private Map<GameObjectActionType, GameObjectAction> copyActions(Map<GameObjectActionType, GameObjectAction> oldMap) {
+        Map<GameObjectActionType, GameObjectAction> map = new HashMap<>();
+        for (GameObjectActionType type : oldMap.keySet()) {
+            GameObjectAction value = oldMap.get(type);
+            map.put(type, new GameObjectAction(value.getCount(), value.getEnergyPerAction(),
+                    value.getDelayPerAction(), value.getWhenNoActionTransformsTo()));
+        }
+        return map;
     }
 
     public GameObjectDto(GameObject gameObject, Season season) {

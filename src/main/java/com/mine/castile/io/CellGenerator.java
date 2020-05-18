@@ -27,7 +27,7 @@ public class CellGenerator {
         Map<String, GameObjectDto> objectDto = cache.get(initialSeason);
 
         for (String id : objectDto.keySet()) {
-            GameObjectDto dto = objectDto.get(id);
+            GameObjectDto dto = new GameObjectDto(objectDto.get(id));
             GameObjectAppear onStart = dto.getAppear().get(GameObjectAppearType.onStart);
             int chance = onStart.getChance();
             if (hadChance(chance)) {

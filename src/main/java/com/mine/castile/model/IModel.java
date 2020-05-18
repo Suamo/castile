@@ -9,8 +9,6 @@ import java.awt.*;
 public interface IModel {
     GameObjectDto get(int row, int column) throws IndexOutOfBoundsException;
 
-    void set(int row, int column, GameObjectDto cell) throws IndexOutOfBoundsException;
-
     int getRows();
 
     int getColumns();

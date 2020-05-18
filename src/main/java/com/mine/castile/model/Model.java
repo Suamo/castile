@@ -8,7 +8,6 @@ import com.mine.castile.listener.ModelEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.swing.event.EventListenerList;
 import java.awt.*;
 
@@ -52,10 +51,6 @@ public class Model implements IModel {
 
     public GameObjectDto get(int row, int column) throws IndexOutOfBoundsException {
         return maze.get(row, column);
-    }
-
-    public void set(int row, int column, GameObjectDto cell) throws IndexOutOfBoundsException {
-        maze.set(row, column, cell);
     }
 
     public int getRows() {

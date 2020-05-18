@@ -9,14 +9,20 @@ import org.springframework.context.annotation.Bean;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import static javax.swing.BorderFactory.createEmptyBorder;
+import static javax.swing.BorderFactory.createStrokeBorder;
 
 @SpringBootApplication
 public class CastileApplication {
 
     public static void main(String[] args) {
         System.out.println("OS bits (mongo detect): " + BitSize.detect());
-        ;
+
         new SpringApplicationBuilder(CastileApplication.class)
                 .headless(false).run(args);
     }
@@ -38,58 +44,59 @@ public class CastileApplication {
         return frame;
     }
 
-    //    @Bean
-    public JDialog inventory(JFrame frame, IModel model) {
-        JPanel panel = inventoryPanel(model);
-
-        JDialog dialog = new JDialog(frame, "Inventory", true);
-        dialog.setModal(false);
-        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        dialog.add(panel);
-        dialog.pack();
-        dialog.setVisible(true);
-        dialog.setResizable(false);
-        return dialog;
-    }
-
     private JPanel inventoryPanel(IModel model) {
-        JLabel energyText = new JLabel("" + model.getMan().getEnergy());
-        JLabel seasonText = new JLabel(model.getSeason().name());
-        JLabel inventoryText = new JLabel(inventoryAsText(model));
-
-        model.addModelListaner(e -> {
-            energyText.setText("" + model.getMan().getEnergy());
-            seasonText.setText(model.getSeason().name());
-            inventoryText.setText(inventoryAsText(model));
-        });
-
         JPanel container = new JPanel(new GridLayout(3, 0));
-        container.setPreferredSize(new Dimension(400, 100));
+        container.setBorder(createStrokeBorder(new BasicStroke(3), new Color(192, 0, 0)));
 
-        JPanel seasonPanel = new JPanel(new BorderLayout());
-        JPanel energyPanel = new JPanel(new BorderLayout());
-        JPanel inventoryPanel = new JPanel(new BorderLayout());
-        container.add(seasonPanel);
-        container.add(energyPanel);
-        container.add(inventoryPanel);
-
-
-        seasonPanel.add(new JLabel("Season: "), BorderLayout.LINE_START);
-        seasonPanel.add(seasonText, BorderLayout.CENTER);
-
-        energyPanel.add(new JLabel("Energy: "), BorderLayout.LINE_START);
-        energyPanel.add(energyText, BorderLayout.CENTER);
-
-        inventoryPanel.add(new JLabel("Inventory: "), BorderLayout.LINE_START);
-        inventoryPanel.add(inventoryText, BorderLayout.CENTER);
+        addInfo(container, model, "Season: ", () -> model.getSeason().name());
+        addInfo(container, model, "Energy: ", () -> "" + model.getMan().getEnergy());
+        addInfo(container, model, "Inventory: ", () -> inventoryAsText(model));
 
         return container;
     }
 
+    private void addInfo(JPanel container, IModel model,
+                         String title, Supplier<String> content) {
+        JPanel rowPanel = new JPanel(new BorderLayout());
+        container.add(rowPanel);
+        int margin = 5;
+        rowPanel.setBorder(createEmptyBorder(margin, margin, margin, margin));
+
+        JLabel contentLabel = newJLabel(content.get(), false);
+        rowPanel.add(newJLabel(title, true), BorderLayout.LINE_START);
+        rowPanel.add(contentLabel, BorderLayout.CENTER);
+
+        model.addModelListaner(e -> {
+            contentLabel.setText(content.get());
+        });
+    }
+
+    private JLabel newJLabel(String text, boolean isTitle) {
+        JLabel label = new JLabel(text);
+        label.setFont(Font.decode("Arial-BOLD-18"));
+        if (isTitle) {
+            label.setForeground(Color.BLUE);
+        }
+        return label;
+    }
+
     private String inventoryAsText(IModel model) {
-        return model.getMan().getInventory().stream()
-                .map(LootMappingDropDto::getId)
-                .collect(Collectors.joining(", ", "{", "}"));
+        Map<String, Integer> map = new HashMap<>();
+        List<LootMappingDropDto> inventory = model.getMan().getInventory();
+        if (inventory.isEmpty()) {
+            return "";
+        }
+
+        for (LootMappingDropDto dto : inventory) {
+            Integer count = map.getOrDefault(dto.getId(), 0);
+            map.put(dto.getId(), ++count);
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String id : map.keySet()) {
+            sb.append(id).append(" [").append(map.get(id)).append("], ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        return sb.toString();
     }
 
 }
