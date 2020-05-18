@@ -16,7 +16,7 @@ import java.util.Random;
 
 public abstract class InteractAction extends ActionImpl {
 
-    private MongoRepository repository;
+    protected MongoRepository repository;
 
     public InteractAction(IModel model, MongoRepository repository) {
         super(model);
@@ -34,6 +34,7 @@ public abstract class InteractAction extends ActionImpl {
         GameObjectAction action = cell.getActions().get(getActionType());
         if (action == null || action.getCount() == null || action.getCount() == 0) {
             System.out.println("Nothing to gather");
+            performTransformation();
             return;
         }
 
@@ -48,6 +49,8 @@ public abstract class InteractAction extends ActionImpl {
 
         man.reduceEnergy(action.getEnergyPerAction());
     }
+
+    protected abstract void performTransformation();
 
     private void tryForLoot(GameObjectDto cell, Integer count) {
         Map<String, LootMappingActions> seasonMappings = repository.getLootMappingCache().get(model.getSeason());

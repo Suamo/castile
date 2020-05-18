@@ -16,6 +16,11 @@ public class GatherAction extends InteractAction {
     }
 
     @Override
+    protected void performTransformation() {
+
+    }
+
+    @Override
     public GameObjectActionType getActionType() {
         return GameObjectActionType.gather;
     }

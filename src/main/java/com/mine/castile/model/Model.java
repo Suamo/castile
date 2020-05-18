@@ -53,6 +53,10 @@ public class Model implements IModel {
         return maze.get(row, column);
     }
 
+    public void set(int row, int column, GameObjectDto dto) throws IndexOutOfBoundsException {
+        maze.set(row, column, dto);
+    }
+
     public int getRows() {
         return maze.getRows();
     }
