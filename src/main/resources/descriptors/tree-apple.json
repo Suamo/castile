@@ -1,8 +1,8 @@
 {
-  "_id": "tree",
+  "_id": "tree-apple",
   "appear": {
     "onStart": {
-      "chance": 10
+      "chance": 20
     },
     "inGame": {
       "chance": 10,
@@ -14,12 +14,14 @@
     "stepInto": {
       "count": 1,
       "energyPerAction": 1,
-      "delayPerAction": 500
+      "delayPerAction": 500,
+      "whenNoActionTransformsTo": "plain"
     },
     "gather": {
       "count": 3,
       "energyPerAction": 3,
-      "delayPerAction": 500
+      "delayPerAction": 500,
+      "whenNoActionTransformsTo": "tree"
     },
     "hits": {
       "count": 3,
@@ -28,16 +30,5 @@
       "whenNoActionTransformsTo": "plain"
     }
   },
-  "evolutionToObject": "plain",
-  "seasonOverrides": {
-    "spring1": {
-      "actions": {
-        "gather": {
-          "count": 3,
-          "energyPerAction": 2,
-          "delayPerAction": 500
-        }
-      }
-    }
-  }
+  "evolutionToObject": "plain"
 }

@@ -15,12 +15,12 @@
           ],
           "loot": [
             {
-              "id": "apple",
+              "id": "branch",
               "maxCount": 1,
               "chance": 100
             },
             {
-              "id": "apple",
+              "id": "wood",
               "maxCount": 2,
               "chance": 50
             }
@@ -92,33 +92,17 @@
         {
           "affectedActions": [
             1,
-            2
-          ],
-          "loot": [
-            {
-              "id": "branch",
-              "maxCount": 1,
-              "chance": 100
-            },
-            {
-              "id": "branch",
-              "maxCount": 2,
-              "chance": 50
-            }
-          ]
-        },
-        {
-          "affectedActions": [
+            2,
             3
           ],
           "loot": [
             {
-              "id": "apple",
+              "id": "branch",
               "maxCount": 1,
               "chance": 100
             },
             {
-              "id": "apple",
+              "id": "wood",
               "maxCount": 2,
               "chance": 50
             }

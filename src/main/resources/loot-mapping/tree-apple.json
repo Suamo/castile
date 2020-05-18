@@ -1,0 +1,91 @@
+{
+  "_id": "tree-apple",
+  "mapping": [
+    {
+      "seasons": [
+        "spring1",
+        "spring2",
+        "spring3",
+        "summer1",
+        "summer2",
+        "summer3"
+      ],
+      "gather": [
+        {
+          "affectedActions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "loot": [
+            {
+              "id": "apple",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "apple",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "seasons": [
+        "spring1",
+        "spring2",
+        "spring3",
+        "summer1",
+        "summer2",
+        "summer3",
+        "fall1",
+        "fall2",
+        "fall3",
+        "winter1",
+        "winter2",
+        "winter3"
+      ],
+      "hits": [
+        {
+          "affectedActions": [
+            1,
+            2
+          ],
+          "loot": [
+            {
+              "id": "wood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "wood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
+        },
+        {
+          "affectedActions": [
+            3,
+            4
+          ],
+          "loot": [
+            {
+              "id": "rareWood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "rareWood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

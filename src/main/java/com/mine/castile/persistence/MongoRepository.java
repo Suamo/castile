@@ -135,6 +135,9 @@ public class MongoRepository {
     }
 
     private void populateDtoLootPerAction(List<LootMappingAction> entityGathers, Map<Integer, List<LootMappingDropDto>> dtoGather) {
+        if (entityGathers == null) {
+            return;
+        }
         for (LootMappingAction entityGather : entityGathers) {
             List<LootMappingDropDto> newDtoDrops = convertDrops(entityGather.getLoot());
             for (Integer affectedAction : entityGather.getAffectedActions()) {

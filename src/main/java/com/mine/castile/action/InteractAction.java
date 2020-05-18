@@ -34,7 +34,6 @@ public abstract class InteractAction extends ActionImpl {
         GameObjectAction action = cell.getActions().get(getActionType());
         if (action == null || action.getCount() == null || action.getCount() == 0) {
             System.out.println("Nothing to gather");
-            performTransformation();
             return;
         }
 
@@ -47,10 +46,30 @@ public abstract class InteractAction extends ActionImpl {
                 " count from " + count + " to " + --count);
         action.setCount(count);
 
+        if (count == 0) {
+            performTransformation();
+        }
+
         man.reduceEnergy(action.getEnergyPerAction());
     }
 
-    protected abstract void performTransformation();
+    private void performTransformation() {
+        Man man = model.getMan();
+        Point directionLocation = man.getDirectionLocation();
+        GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
+        GameObjectAction action = cell.getActions().get(getActionType());
+
+        String transformsTo = action.getWhenNoActionTransformsTo();
+        if (transformsTo == null) {
+            return;
+        }
+
+        GameObjectDto newObject = repository.getObjectsCache()
+                .get(model.getSeason())
+                .get(transformsTo);
+
+        model.set(directionLocation.x, directionLocation.y, new GameObjectDto(newObject));
+    }
 
     private void tryForLoot(GameObjectDto cell, Integer count) {
         Map<String, LootMappingActions> seasonMappings = repository.getLootMappingCache().get(model.getSeason());
