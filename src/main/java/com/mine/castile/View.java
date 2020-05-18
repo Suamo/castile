@@ -10,6 +10,7 @@ import com.mine.castile.dom.dto.GameObjectDto;
 import com.mine.castile.listener.RefreshListener;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
+import com.mine.castile.persistence.MongoRepository;
 import com.mine.castile.registry.CellRendererRegistry;
 import com.mine.castile.registry.Direction;
 import com.mine.castile.registry.FrameRendererRegistry;
@@ -31,14 +32,14 @@ public class View extends JComponent {
     private ManRendererRegistry manRendererRegistry;
 
     public View(IModel model, CellRendererRegistry rendererRegistry,
-                ManRendererRegistry manRendererRegistry) {
+                ManRendererRegistry manRendererRegistry, MongoRepository repository) {
         this.model = model;
         this.rendererRegistry = rendererRegistry;
         this.manRendererRegistry = manRendererRegistry;
 
         cacheMap();
         configureInputs();
-        configureActions(model);
+        configureActions(model, repository);
         configureListeners(model);
     }
 
@@ -83,14 +84,14 @@ public class View extends JComponent {
         inputMap.put(getKeyStroke(KeyEvent.VK_ALT, 0, true), "hit");
     }
 
-    private void configureActions(IModel model) {
+    private void configureActions(IModel model, MongoRepository repository) {
         ActionMap actionMap = getActionMap();
         actionMap.put(Direction.UP, new UpAction(model));
         actionMap.put(Direction.LEFT, new LeftAction(model));
         actionMap.put(Direction.RIGHT, new RightAction(model));
         actionMap.put(Direction.DOWN, new DownAction(model));
-        actionMap.put("gather", new GatherAction(model));
-        actionMap.put("hit", new HitAction(model));
+        actionMap.put("gather", new GatherAction(model, repository));
+        actionMap.put("hit", new HitAction(model, repository));
     }
 
     private void cacheMap() {

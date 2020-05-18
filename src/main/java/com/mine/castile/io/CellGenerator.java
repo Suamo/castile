@@ -1,7 +1,7 @@
 package com.mine.castile.io;
 
 import com.mine.castile.dom.dto.GameObjectDto;
-import com.mine.castile.dom.entity.GameObjectAppear;
+import com.mine.castile.dom.entity.objects.GameObjectAppear;
 import com.mine.castile.dom.enums.GameObjectAppearType;
 import com.mine.castile.dom.enums.Season;
 import com.mine.castile.persistence.MongoRepository;

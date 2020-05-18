@@ -2,9 +2,14 @@ package com.mine.castile.persistence;
 
 import com.google.gson.Gson;
 import com.mine.castile.dom.dto.GameObjectDto;
-import com.mine.castile.dom.entity.GameObject;
+import com.mine.castile.dom.dto.loot.LootMappingActions;
+import com.mine.castile.dom.dto.loot.LootMappingDropDto;
 import com.mine.castile.dom.entity.Loot;
-import com.mine.castile.dom.entity.LootMapping;
+import com.mine.castile.dom.entity.loot.LootMapping;
+import com.mine.castile.dom.entity.loot.LootMappingAction;
+import com.mine.castile.dom.entity.loot.LootMappingDrop;
+import com.mine.castile.dom.entity.loot.LootMappingSeason;
+import com.mine.castile.dom.entity.objects.GameObject;
 import com.mine.castile.dom.enums.Season;
 import com.mine.castile.renderer.CastileResourceLoader;
 import org.springframework.core.io.Resource;
@@ -17,10 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UncheckedIOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -33,7 +35,7 @@ public class MongoRepository {
 
     private Map<Season, Map<String, GameObjectDto>> objectsCache;
     private Map<Season, Map<String, Loot>> lootCache;
-    private Map<Season, Map<String, LootMapping>> lootMappingCache;
+    private Map<Season, Map<String, LootMappingActions>> lootMappingCache;
 
     public MongoRepository(Gson gson, MongoTemplate mongoTemplate, CastileResourceLoader resourceLoader) {
         this.gson = gson;
@@ -103,16 +105,53 @@ public class MongoRepository {
         return dtos;
     }
 
-    private Map<Season, Map<String, LootMapping>> lootMappingToDtos(List<LootMapping> entities) {
-        Map<Season, Map<String, LootMapping>> dtos = new HashMap<>();
+    private Map<Season, Map<String, LootMappingActions>> lootMappingToDtos(List<LootMapping> entities) {
+        Map<Season, Map<String, LootMappingActions>> dtos = new HashMap<>();
         for (LootMapping entity : entities) {
-            for (Season season : Season.values()) {
-                Map<String, LootMapping> map = dtos.getOrDefault(season, new HashMap<>());
-                map.put(entity.get_id(), entity);
-                dtos.put(season, map);
+
+            String id = entity.get_id();
+
+            for (LootMappingSeason entitySeasonMapping : entity.getMapping()) {
+                for (Season entitySeason : entitySeasonMapping.getSeasons()) {
+                    Map<String, LootMappingActions> dtoSeasonMappings = dtos.getOrDefault(entitySeason, new HashMap<>());
+                    dtos.put(entitySeason, dtoSeasonMappings);
+
+                    LootMappingActions dtoMappingActions = dtoSeasonMappings.getOrDefault(id, new LootMappingActions());
+                    dtoSeasonMappings.put(id, dtoMappingActions);
+
+
+                    List<LootMappingAction> entityGathers = entitySeasonMapping.getGather();
+                    List<LootMappingAction> entityHits = entitySeasonMapping.getHits();
+
+                    Map<Integer, List<LootMappingDropDto>> dtoGather = dtoMappingActions.getGather();
+                    Map<Integer, List<LootMappingDropDto>> dtoHits = dtoMappingActions.getHits();
+
+                    populateDtoLootPerAction(entityGathers, dtoGather);
+                    populateDtoLootPerAction(entityHits, dtoHits);
+                }
             }
         }
         return dtos;
+    }
+
+    private void populateDtoLootPerAction(List<LootMappingAction> entityGathers, Map<Integer, List<LootMappingDropDto>> dtoGather) {
+        for (LootMappingAction entityGather : entityGathers) {
+            List<LootMappingDropDto> newDtoDrops = convertDrops(entityGather.getLoot());
+            for (Integer affectedAction : entityGather.getAffectedActions()) {
+                List<LootMappingDropDto> dtoDrops =
+                        dtoGather.getOrDefault(affectedAction, new ArrayList<>());
+                dtoGather.put(affectedAction, dtoDrops);
+                dtoDrops.addAll(newDtoDrops);
+            }
+        }
+    }
+
+    private List<LootMappingDropDto> convertDrops(List<LootMappingDrop> loot) {
+        ArrayList<LootMappingDropDto> dtoDrops = new ArrayList<>();
+        for (LootMappingDrop entityDrop : loot) {
+            dtoDrops.add(new LootMappingDropDto(entityDrop));
+        }
+        return dtoDrops;
     }
 
     public Map<Season, Map<String, GameObjectDto>> getObjectsCache() {
@@ -123,7 +162,7 @@ public class MongoRepository {
         return lootCache;
     }
 
-    public Map<Season, Map<String, LootMapping>> getLootMappingCache() {
+    public Map<Season, Map<String, LootMappingActions>> getLootMappingCache() {
         return lootMappingCache;
     }
 }

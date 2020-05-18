@@ -16,6 +16,11 @@
       "energyPerAction": 1,
       "delayPerAction": 500
     },
+    "gather": {
+      "count": 3,
+      "energyPerAction": 3,
+      "delayPerAction": 500
+    },
     "hits": {
       "count": 3,
       "energyPerAction": 3,

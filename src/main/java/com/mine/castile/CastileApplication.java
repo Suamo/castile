@@ -1,7 +1,6 @@
 package com.mine.castile;
 
-import com.mine.castile.listener.IModelListener;
-import com.mine.castile.listener.ModelEvent;
+import com.mine.castile.dom.dto.loot.LootMappingDropDto;
 import com.mine.castile.model.IModel;
 import de.flapdoodle.embed.process.distribution.BitSize;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class CastileApplication {
@@ -35,21 +35,23 @@ public class CastileApplication {
 
     @Bean
     public JDialog inventory(JFrame frame, IModel model) {
-        JLabel energyLaber = new JLabel("" + model.getMan().getEnergy());
-        JLabel seasonLaber = new JLabel(model.getSeason().name());
+        JLabel energyText = new JLabel("" + model.getMan().getEnergy());
+        JLabel seasonText = new JLabel(model.getSeason().name());
+        JLabel inventoryText = new JLabel(inventoryAsText(model));
 
-        model.addModelListaner(new IModelListener() {
-            @Override
-            public void modelChanged(ModelEvent e) {
-                energyLaber.setText("" + model.getMan().getEnergy());
-            }
+        model.addModelListaner(e -> {
+            energyText.setText("" + model.getMan().getEnergy());
+            seasonText.setText(model.getSeason().name());
+            inventoryText.setText(inventoryAsText(model));
         });
 
         JPanel panel = new JPanel(new GridLayout(0, 2));
         panel.add(new JLabel("Season"));
-        panel.add(energyLaber);
+        panel.add(energyText);
         panel.add(new JLabel("Energy"));
-        panel.add(seasonLaber);
+        panel.add(seasonText);
+        panel.add(new JLabel("Inventory"));
+        panel.add(inventoryText);
         panel.setPreferredSize(new Dimension(400, 100));
 
 
@@ -61,6 +63,12 @@ public class CastileApplication {
         dialog.setVisible(true);
         dialog.setResizable(false);
         return dialog;
+    }
+
+    private String inventoryAsText(IModel model) {
+        return model.getMan().getInventory().stream()
+                .map(LootMappingDropDto::getId)
+                .collect(Collectors.joining(", ", "{", "}"));
     }
 
 }

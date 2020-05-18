@@ -1,7 +1,7 @@
 package com.mine.castile.action;
 
 import com.mine.castile.dom.dto.GameObjectDto;
-import com.mine.castile.dom.entity.GameObjectAction;
+import com.mine.castile.dom.entity.objects.GameObjectAction;
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;

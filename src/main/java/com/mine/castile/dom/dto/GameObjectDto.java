@@ -1,8 +1,8 @@
 package com.mine.castile.dom.dto;
 
-import com.mine.castile.dom.entity.GameObject;
-import com.mine.castile.dom.entity.GameObjectAction;
-import com.mine.castile.dom.entity.GameObjectAppear;
+import com.mine.castile.dom.entity.objects.GameObject;
+import com.mine.castile.dom.entity.objects.GameObjectAction;
+import com.mine.castile.dom.entity.objects.GameObjectAppear;
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.dom.enums.GameObjectAppearType;
 import com.mine.castile.dom.enums.Season;

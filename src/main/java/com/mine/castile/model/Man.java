@@ -1,8 +1,11 @@
 package com.mine.castile.model;
 
+import com.mine.castile.dom.dto.loot.LootMappingDropDto;
 import com.mine.castile.registry.Direction;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Man {
     public static final int ENERRY_BASE = 50;
@@ -11,6 +14,7 @@ public class Man {
     private int imageIndex;
     private Direction direction;
     private int energy;
+    private List<LootMappingDropDto> inventory = new ArrayList<>();
 
     public Man(int column, int row) {
         this.column = column;
@@ -78,5 +82,9 @@ public class Man {
 
     public void reduceEnergy(int energySpent) {
         energy -= energySpent;
+    }
+
+    public List<LootMappingDropDto> getInventory() {
+        return inventory;
     }
 }

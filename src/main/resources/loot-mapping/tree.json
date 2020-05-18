@@ -1,62 +1,167 @@
 {
   "_id": "tree",
-  "mapping": {
-    "gather": [
-      [
+  "mapping": [
+    {
+      "seasons": [
+        "spring1",
+        "spring2",
+        "spring3"
+      ],
+      "gather": [
         {
-          "id": "apple",
-          "maxCount": 1,
-          "chance": 100
+          "affectedActions": [
+            1,
+            2
+          ],
+          "loot": [
+            {
+              "id": "apple",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "apple",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         },
         {
-          "id": "apple",
-          "maxCount": 2,
-          "chance": 25
-        },
-        {
-          "id": "branch",
-          "maxCount": 3,
-          "chance": 10
+          "affectedActions": [
+            3
+          ],
+          "loot": [
+            {
+              "id": "branch",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "branch",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         }
       ],
-      [
+      "hits": [
         {
-          "id": "apple",
-          "maxCount": 3,
-          "chance": 80
+          "affectedActions": [
+            1
+          ],
+          "loot": [
+            {
+              "id": "wood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "wood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         },
         {
-          "id": "branch",
-          "maxCount": 3,
-          "chance": 50
+          "affectedActions": [
+            2,
+            3
+          ],
+          "loot": [
+            {
+              "id": "rareWood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "rareWood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         }
       ]
-    ],
-    "hits": [
-      [
+    },
+    {
+      "seasons": [
+        "summer1",
+        "summer2",
+        "summer3"
+      ],
+      "gather": [
         {
-          "id": "wood",
-          "maxCount": 3,
-          "chance": 25
+          "affectedActions": [
+            1,
+            2
+          ],
+          "loot": [
+            {
+              "id": "branch",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "branch",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         },
         {
-          "id": "rareWood",
-          "maxCount": 3,
-          "chance": 10
+          "affectedActions": [
+            3
+          ],
+          "loot": [
+            {
+              "id": "apple",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "apple",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         }
       ],
-      [
+      "hits": [
         {
-          "id": "rareWood",
-          "maxCount": 3,
-          "chance": 80
+          "affectedActions": [
+            1
+          ],
+          "loot": [
+            {
+              "id": "rareWood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "rareWood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         },
         {
-          "id": "treeHeart",
-          "maxCount": 3,
-          "chance": 50
+          "affectedActions": [
+            2,
+            3
+          ],
+          "loot": [
+            {
+              "id": "wood",
+              "maxCount": 1,
+              "chance": 100
+            },
+            {
+              "id": "wood",
+              "maxCount": 2,
+              "chance": 50
+            }
+          ]
         }
       ]
-    ]
-  }
+    }
+  ]
 }

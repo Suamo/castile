@@ -1,4 +1,4 @@
-package com.mine.castile.dom.entity;
+package com.mine.castile.dom.entity.objects;
 
 public class GameObjectAction {
     private Integer count;

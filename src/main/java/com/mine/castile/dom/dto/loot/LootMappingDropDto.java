@@ -1,10 +1,18 @@
-package com.mine.castile.dom.entity;
+package com.mine.castile.dom.dto.loot;
 
-public class LootMappingDrop {
+import com.mine.castile.dom.entity.loot.LootMappingDrop;
+
+public class LootMappingDropDto {
 
     private String id;
     private int maxCount;
     private int chance;
+
+    public LootMappingDropDto(LootMappingDrop entityDrop) {
+        this.id = entityDrop.getId();
+        this.maxCount = entityDrop.getMaxCount();
+        this.chance = entityDrop.getChance();
+    }
 
     public String getId() {
         return id;

@@ -1,4 +1,4 @@
-package com.mine.castile.dom.entity;
+package com.mine.castile.dom.entity.objects;
 
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.dom.enums.GameObjectAppearType;
