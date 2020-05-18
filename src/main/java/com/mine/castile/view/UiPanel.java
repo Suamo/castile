@@ -31,7 +31,7 @@ public class UiPanel extends JPanel {
         layeredPane.add(view, new Integer(0));
         layeredPane.add(statsPanel, new Integer(1));
         layeredPane.add(inventoryPanel, new Integer(2));
-        add(layeredPane);
+        add(layeredPane, CENTER_ALIGNMENT);
         setOpaque(true);
     }
 }

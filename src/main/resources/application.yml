@@ -2,6 +2,7 @@ logging:
     file: castile.log
 
 game:
+    fullscreen: false
     init:
         season: "spring3"
         map:
