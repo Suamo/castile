@@ -28,6 +28,7 @@ public abstract class ActionImpl extends AbstractAction {
             man.setEnergy(Man.ENERRY_BASE);
             model.nextSeason();
         }
+        man.setImageIndex((man.getImageIndex() + 1) % 3);
         model.setMan(man);
     }
 
@@ -43,7 +44,6 @@ public abstract class ActionImpl extends AbstractAction {
         GameObjectDto cell = model.get(point.x, point.y);
 
         if (isStepIntoPossible(point) && !cell.isBlocking()) {
-            man.setImageIndex((man.getImageIndex() + 1) % 3);
             man.setLocation(point);
 
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);

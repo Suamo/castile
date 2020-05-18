@@ -37,7 +37,10 @@ public class View extends JComponent {
         this.rendererRegistry = rendererRegistry;
         this.manRendererRegistry = manRendererRegistry;
 
-        cacheMap();
+        Dimension size = getPreferredSize();
+        setOpaque(true);
+        setBounds(5, 5, (int) size.getWidth(), (int) size.getHeight());
+
         configureInputs();
         configureActions(model, repository);
         configureListeners(model);
@@ -92,19 +95,6 @@ public class View extends JComponent {
         actionMap.put(Direction.DOWN, new DownAction(model));
         actionMap.put("gather", new GatherAction(model, repository));
         actionMap.put("hit", new HitAction(model, repository));
-    }
-
-    private void cacheMap() {
-//        for (int row = 0; row < model.getRows(); row++) {
-//            for (int column = 0; column < model.getColumns(); column++) {
-//                GameObjectDto cell = model.get(column, row);
-//                ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.get_id());
-//                int x = (column - location.x) * Constants.CELL_WIDTH;
-//                int y = (row - location.y) * Constants.CELL_HEIGHT;
-//                Rectangle rect = new Rectangle(x, y, Constants.CELL_WIDTH, Constants.CELL_HEIGHT);
-//                renderer.render(g2, rect);
-//            }
-//        }
     }
 
     private void drawMap(Graphics2D g2) {

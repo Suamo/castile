@@ -26,7 +26,6 @@ public abstract class InteractAction extends ActionImpl {
     @Override
     protected void interactWithObject() {
         Man man = model.getMan();
-        man.setImageIndex(2);
 
         Point directionLocation = man.getDirectionLocation();
         GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
@@ -75,6 +74,9 @@ public abstract class InteractAction extends ActionImpl {
         Map<String, LootMappingActions> seasonMappings = repository.getLootMappingCache().get(model.getSeason());
 
         LootMappingActions mappingDto = seasonMappings.get(cell.get_id());
+        if (mappingDto == null) {
+            return;
+        }
         Map<Integer, java.util.List<LootMappingDropDto>> actions = getActions(mappingDto);
         List<LootMappingDropDto> possibleDrops = actions.get(count);
 
