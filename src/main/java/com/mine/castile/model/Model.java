@@ -38,6 +38,10 @@ public class Model implements IModel {
 
     public void setMan(Man man) {
         this.man = man;
+        modelUpdated();
+    }
+
+    public void modelUpdated() {
         fireModelChanged(new ModelEvent(this));
     }
 
@@ -91,7 +95,7 @@ public class Model implements IModel {
     @Override
     public void nextSeason() {
         this.season = this.season.getNextSeason();
-        fireModelChanged(new ModelEvent(this));
+        modelUpdated();
         System.out.println("Its " + season.name() + " now!");
     }
 }

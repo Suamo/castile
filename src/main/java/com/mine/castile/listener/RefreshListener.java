@@ -1,6 +1,6 @@
 package com.mine.castile.listener;
 
-import com.mine.castile.View;
+import com.mine.castile.view.View;
 
 public class RefreshListener implements IModelListener {
     private View view;

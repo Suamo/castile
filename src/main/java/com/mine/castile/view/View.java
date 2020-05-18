@@ -1,7 +1,9 @@
-package com.mine.castile;
+package com.mine.castile.view;
 
+import com.mine.castile.Constants;
 import com.mine.castile.action.GatherAction;
 import com.mine.castile.action.HitAction;
+import com.mine.castile.action.InventoryAction;
 import com.mine.castile.action.movement.DownAction;
 import com.mine.castile.action.movement.LeftAction;
 import com.mine.castile.action.movement.RightAction;
@@ -30,22 +32,27 @@ public class View extends JComponent {
     private IModel model;
     private CellRendererRegistry rendererRegistry;
     private ManRendererRegistry manRendererRegistry;
+    private final MongoRepository repository;
+    private final InventoryPanel inventoryPanel;
 
-    public View(IModel model, CellRendererRegistry rendererRegistry,
-                ManRendererRegistry manRendererRegistry, MongoRepository repository) {
+    public View(IModel model, CellRendererRegistry rendererRegistry, ManRendererRegistry manRendererRegistry,
+                MongoRepository repository, InventoryPanel inventoryPanel) {
         this.model = model;
         this.rendererRegistry = rendererRegistry;
         this.manRendererRegistry = manRendererRegistry;
+        this.repository = repository;
+        this.inventoryPanel = inventoryPanel;
 
         Dimension size = getPreferredSize();
         setOpaque(true);
         setBounds(5, 5, (int) size.getWidth(), (int) size.getHeight());
 
         configureInputs();
-        configureActions(model, repository);
-        configureListeners(model);
+        configureActions();
+        configureListeners();
     }
 
+    @Override
     public void paint(Graphics g) {
         int width = getWidth();
         int height = getHeight();
@@ -57,14 +64,12 @@ public class View extends JComponent {
         drawMan(g2);
     }
 
+    @Override
     public Dimension getPreferredSize() {
-        int width = (Constants.VIEW_RADIX * 2 + 1) * Constants.CELL_WIDTH;
-        int height = (Constants.VIEW_RADIX * 2 + 1) * Constants.CELL_HEIGHT;
-
-        return new Dimension(width, height);
+        return new Dimension(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
     }
 
-    protected void configureListeners(IModel model) {
+    protected void configureListeners() {
         model.addModelListaner(new RefreshListener(this));
     }
 
@@ -85,9 +90,11 @@ public class View extends JComponent {
 
         inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0, true), "gather");
         inputMap.put(getKeyStroke(KeyEvent.VK_ALT, 0, true), "hit");
+
+        inputMap.put(getKeyStroke(KeyEvent.VK_I, 0, true), "inventory");
     }
 
-    private void configureActions(IModel model, MongoRepository repository) {
+    private void configureActions() {
         ActionMap actionMap = getActionMap();
         actionMap.put(Direction.UP, new UpAction(model));
         actionMap.put(Direction.LEFT, new LeftAction(model));
@@ -95,6 +102,7 @@ public class View extends JComponent {
         actionMap.put(Direction.DOWN, new DownAction(model));
         actionMap.put("gather", new GatherAction(model, repository));
         actionMap.put("hit", new HitAction(model, repository));
+        actionMap.put("inventory", new InventoryAction(inventoryPanel, model, repository));
     }
 
     private void drawMap(Graphics2D g2) {

@@ -21,6 +21,8 @@ public interface IModel {
 
     void setMan(Man man);
 
+    void modelUpdated();
+
     void addModelListaner(IModelListener listener);
 
     Season getSeason();
