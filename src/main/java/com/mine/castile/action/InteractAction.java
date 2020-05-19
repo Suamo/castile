@@ -50,6 +50,11 @@ public abstract class InteractAction extends ActionImpl {
         }
 
         man.reduceEnergy(action.getEnergyPerAction());
+        int energy = man.getEnergy();
+        if (energy <= 0) {
+            man.setEnergy(Man.ENERRY_BASE);
+            model.nextSeason();
+        }
     }
 
     private void performTransformation() {

@@ -24,10 +24,6 @@ public abstract class ActionImpl extends AbstractAction {
         Man man = model.getMan();
         interactWithObject();
 
-        if (man.getEnergy() == 0) {
-            man.setEnergy(Man.ENERRY_BASE);
-            model.nextSeason();
-        }
         man.setImageIndex((man.getImageIndex() + 1) % 3);
         model.setMan(man);
     }
@@ -49,7 +45,12 @@ public abstract class ActionImpl extends AbstractAction {
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
             delayAction(action);
 
-            model.getMan().reduceEnergy(action.getEnergyPerAction());
+            man.reduceEnergy(action.getEnergyPerAction());
+            int energy = man.getEnergy();
+            if (energy <= 0) {
+                man.setEnergy(Man.ENERRY_BASE);
+                model.nextSeason();
+            }
         }
     }
 
