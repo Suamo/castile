@@ -12,9 +12,9 @@ public class UiPanel extends JPanel {
     private View view;
     private Model model;
     private InventoryPanel inventoryPanel;
-    private StatsPanel statsPanel;
+    private StatusPanel statsPanel;
 
-    public UiPanel(View view, Model model, InventoryPanel inventoryPanel, StatsPanel statsPanel) {
+    public UiPanel(View view, Model model, InventoryPanel inventoryPanel, StatusPanel statsPanel) {
         this.view = view;
         this.model = model;
         this.inventoryPanel = inventoryPanel;

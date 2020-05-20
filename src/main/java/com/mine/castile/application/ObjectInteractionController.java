@@ -1,38 +1,50 @@
-package com.mine.castile.application.action.interaction;
+package com.mine.castile.application;
 
-import com.mine.castile.application.action.ActionCharacterAction;
 import com.mine.castile.application.model.Man;
 import com.mine.castile.application.model.ManStatus;
 import com.mine.castile.application.model.Model;
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.dom.loot.LootMappingActionsDto;
 import com.mine.castile.common.dom.loot.LootMappingDropDto;
+import com.mine.castile.common.events.ObjectInteractionEvent;
 import com.mine.castile.data.dom.enums.GameObjectActionType;
 import com.mine.castile.data.dom.objects.GameObjectAction;
 import com.mine.castile.data.persistence.MongoRepository;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Controller;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public abstract class InteractAction extends ActionCharacterAction {
+@Controller
+public class ObjectInteractionController {
+    private Model model;
+    private MongoRepository repository;
 
-    protected MongoRepository repository;
-
-    public InteractAction(Model model, MongoRepository repository) {
-        super(model);
+    public ObjectInteractionController(Model model, MongoRepository repository) {
+        this.model = model;
         this.repository = repository;
     }
 
-    @Override
-    protected void interactWithObject() {
+    @EventListener
+    public void onEvent(ObjectInteractionEvent event) {
+        GameObjectActionType actionType = getGameObjectActionType(event);
+        interactWithObject(actionType);
+
+        Man man = model.getMan();
+        man.setImageIndex((man.getImageIndex() + 1) % 3);
+        model.setMan(man);
+    }
+
+    private void interactWithObject(GameObjectActionType actionType) {
         Man man = model.getMan();
 
         Point directionLocation = man.getDirectionLocation();
         GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
 
-        GameObjectAction action = cell.getActions().get(getActionType());
+        GameObjectAction action = cell.getActions().get(actionType);
         if (action == null || action.getCount() == null || action.getCount() == 0) {
             System.out.println("Nothing to gather");
             return;
@@ -41,14 +53,13 @@ public abstract class InteractAction extends ActionCharacterAction {
         delayAction(action);
 
         Integer count = action.getCount();
-        tryForLoot(cell, count);
+        tryForLoot(actionType, cell, count);
 
-        System.out.println("Changed " + getActionType().name() +
-                " count from " + count + " to " + --count);
-        action.setCount(count);
+        System.out.println(String.format("Changed %s count from %s to %s", actionType.name(), count, count - 1));
+        action.setCount(--count);
 
         if (count == 0) {
-            performTransformation();
+            performTransformation(actionType);
         }
 
         ManStatus status = man.getManStatus();
@@ -60,11 +71,20 @@ public abstract class InteractAction extends ActionCharacterAction {
         }
     }
 
-    private void performTransformation() {
+    private void delayAction(GameObjectAction action) {
+        try {
+            Integer delayPerAction = action.getDelayPerAction();
+            Thread.sleep(delayPerAction);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void performTransformation(GameObjectActionType actionType) {
         Man man = model.getMan();
         Point directionLocation = man.getDirectionLocation();
         GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
-        GameObjectAction action = cell.getActions().get(getActionType());
+        GameObjectAction action = cell.getActions().get(actionType);
 
         String transformsTo = action.getWhenNoActionTransformsTo();
         if (transformsTo == null) {
@@ -78,15 +98,15 @@ public abstract class InteractAction extends ActionCharacterAction {
         model.set(directionLocation.x, directionLocation.y, new GameObjectDto(newObject));
     }
 
-    private void tryForLoot(GameObjectDto cell, Integer count) {
+    private void tryForLoot(GameObjectActionType actionType, GameObjectDto cell, Integer count) {
         Map<String, LootMappingActionsDto> seasonMappings = repository.getLootMappingCache().get(model.getSeason());
 
         LootMappingActionsDto mappingDto = seasonMappings.get(cell.get_id());
         if (mappingDto == null) {
             return;
         }
-        Map<Integer, java.util.List<LootMappingDropDto>> actions = getActions(mappingDto);
-        List<LootMappingDropDto> possibleDrops = actions.get(count);
+        Map<Integer, java.util.List<LootMappingDropDto>> actions = getActions(mappingDto, actionType);
+        java.util.List<LootMappingDropDto> possibleDrops = actions.get(count);
 
         for (LootMappingDropDto possibleDrop : possibleDrops) {
             if (hadChance(possibleDrop.getChance())) {
@@ -98,6 +118,17 @@ public abstract class InteractAction extends ActionCharacterAction {
                 }
             }
         }
+    }
+
+    private Map<Integer, List<LootMappingDropDto>> getActions(LootMappingActionsDto dto,
+                                                              GameObjectActionType actionType) {
+        switch (actionType) {
+            case gather:
+                return dto.getGather();
+            case hits:
+                return dto.getHits();
+        }
+        throw new UnsupportedOperationException();
     }
 
     private boolean hadChance(int chance) {
@@ -115,12 +146,15 @@ public abstract class InteractAction extends ActionCharacterAction {
         return r.nextInt((max - min) + 1) + min;
     }
 
-    @Override
-    protected boolean isStepIntoPossible(Point point) {
-        return false;
+    private GameObjectActionType getGameObjectActionType(ObjectInteractionEvent event) {
+        switch (event.getObjectInteraction()) {
+            case GATHER:
+                return GameObjectActionType.gather;
+            case HIT:
+                return GameObjectActionType.hits;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
-    public abstract Map<Integer, List<LootMappingDropDto>> getActions(LootMappingActionsDto mappingDto);
-
-    public abstract GameObjectActionType getActionType();
 }

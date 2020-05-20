@@ -1,26 +1,26 @@
 package com.mine.castile.application.model;
 
-import com.mine.castile.application.listener.IModelListener;
 import com.mine.castile.application.listener.ModelEvent;
 import com.mine.castile.common.dom.GameObjectDto;
+import com.mine.castile.common.events.ModelChangedEvent;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.presentation.PresentationConstants;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Component;
 
-import javax.swing.event.EventListenerList;
 import java.awt.*;
 
 @Component
-public class Model {
-    private EventListenerList listenerList = new EventListenerList();
+public class Model implements ApplicationEventPublisherAware {
 
     private Maze maze;
     private Man man;
     private Season season;
+    private ApplicationEventPublisher eventPublisher;
 
-    public Model(Maze maze, Man man,
-                 @Value("${game.init.season}") Season initialSeason) {
+    public Model(Maze maze, Man man, @Value("${game.init.season}") Season initialSeason) {
         this.maze = maze;
         this.man = man;
         this.season = initialSeason;
@@ -32,10 +32,6 @@ public class Model {
 
     public void setMan(Man man) {
         this.man = man;
-        modelUpdated();
-    }
-
-    public void modelUpdated() {
         fireModelChanged(new ModelEvent(this));
     }
 
@@ -63,17 +59,8 @@ public class Model {
         return maze.getColumns();
     }
 
-    public void addModelListaner(IModelListener listener) {
-        listenerList.add(IModelListener.class, listener);
-    }
-
     protected void fireModelChanged(ModelEvent e) {
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == IModelListener.class) {
-                ((IModelListener) listeners[i + 1]).modelChanged(e);
-            }
-        }
+        eventPublisher.publishEvent(new ModelChangedEvent());
     }
 
     public Season getSeason() {
@@ -82,7 +69,12 @@ public class Model {
 
     public void nextSeason() {
         this.season = this.season.getNextSeason();
-        modelUpdated();
+        fireModelChanged(new ModelEvent(this));
         System.out.println("Its " + season.name() + " now!");
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 }

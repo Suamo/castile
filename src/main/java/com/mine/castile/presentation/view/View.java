@@ -1,54 +1,48 @@
 package com.mine.castile.presentation.view;
 
-import com.mine.castile.application.action.hotkeys.InventoryAction;
-import com.mine.castile.application.action.interaction.GatherAction;
-import com.mine.castile.application.action.interaction.HitAction;
-import com.mine.castile.application.action.movement.DownAction;
-import com.mine.castile.application.action.movement.LeftAction;
-import com.mine.castile.application.action.movement.RightAction;
-import com.mine.castile.application.action.movement.UpAction;
-import com.mine.castile.application.listener.RefreshListener;
 import com.mine.castile.application.model.Man;
 import com.mine.castile.application.model.Model;
 import com.mine.castile.common.dom.GameObjectDto;
-import com.mine.castile.data.persistence.MongoRepository;
+import com.mine.castile.common.enums.Direction;
+import com.mine.castile.common.enums.ObjectInteraction;
+import com.mine.castile.common.events.ApplicationEvent;
+import com.mine.castile.common.events.CharacterMoveEvent;
+import com.mine.castile.common.events.InventoryRequestEvent;
+import com.mine.castile.common.events.ObjectInteractionEvent;
 import com.mine.castile.presentation.PresentationConstants;
 import com.mine.castile.presentation.registry.CellRendererRegistry;
-import com.mine.castile.presentation.registry.Direction;
 import com.mine.castile.presentation.registry.FrameRendererRegistry;
 import com.mine.castile.presentation.registry.ManRendererRegistry;
 import com.mine.castile.presentation.renderer.ImageRenderer;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
+import static java.awt.event.KeyEvent.*;
 import static javax.swing.KeyStroke.getKeyStroke;
 
 @Component
-public class View extends JComponent {
+public class View extends JComponent implements ApplicationEventPublisherAware {
 
     private Model model;
     private CellRendererRegistry rendererRegistry;
     private ManRendererRegistry manRendererRegistry;
-    private final MongoRepository repository;
-    private final InventoryPanel inventoryPanel;
+    private ApplicationEventPublisher eventPublisher;
 
-    public View(Model model, CellRendererRegistry rendererRegistry, ManRendererRegistry manRendererRegistry,
-                MongoRepository repository, InventoryPanel inventoryPanel) {
+    public View(Model model, CellRendererRegistry rendererRegistry, ManRendererRegistry manRendererRegistry) {
         this.model = model;
         this.rendererRegistry = rendererRegistry;
         this.manRendererRegistry = manRendererRegistry;
-        this.repository = repository;
-        this.inventoryPanel = inventoryPanel;
 
         Dimension size = getPreferredSize();
         setOpaque(true);
         setBounds(5, 5, (int) size.getWidth(), (int) size.getHeight());
 
         configureInputs();
-        configureListeners();
     }
 
     @Override
@@ -68,25 +62,26 @@ public class View extends JComponent {
         return new Dimension(PresentationConstants.VIEWPORT_WIDTH, PresentationConstants.VIEWPORT_HEIGHT);
     }
 
-    private void configureListeners() {
-        model.addModelListaner(new RefreshListener(this));
-    }
-
     private void configureInputs() {
-        bindKey(new UpAction(model), "up", KeyEvent.VK_UP, KeyEvent.VK_W);
-        bindKey(new LeftAction(model), "left", KeyEvent.VK_LEFT, KeyEvent.VK_A);
-        bindKey(new RightAction(model), "right", KeyEvent.VK_RIGHT, KeyEvent.VK_D);
-        bindKey(new DownAction(model), "down", KeyEvent.VK_DOWN, KeyEvent.VK_S);
-        bindKey(new GatherAction(model, repository), "gather", KeyEvent.VK_SPACE);
-        bindKey(new HitAction(model, repository), "hit", KeyEvent.VK_ALT);
-        bindKey(new InventoryAction(inventoryPanel), "inventory", KeyEvent.VK_I);
+        bindKey(new CharacterMoveEvent(Direction.UP), VK_UP, VK_W);
+        bindKey(new CharacterMoveEvent(Direction.LEFT), VK_LEFT, VK_A);
+        bindKey(new CharacterMoveEvent(Direction.RIGHT), VK_RIGHT, VK_D);
+        bindKey(new CharacterMoveEvent(Direction.DOWN), VK_DOWN, VK_S);
+        bindKey(new ObjectInteractionEvent(ObjectInteraction.GATHER), VK_SPACE);
+        bindKey(new ObjectInteractionEvent(ObjectInteraction.HIT), VK_ALT);
+        bindKey(new InventoryRequestEvent(), VK_I);
     }
 
-    private void bindKey(AbstractAction action, Object name, int... keys) {
+    private void bindKey(ApplicationEvent event, int... keys) {
         for (int key : keys) {
-            getInputMap().put(getKeyStroke(key, 0, true), name);
+            getInputMap().put(getKeyStroke(key, 0, true), event.getId());
         }
-        getActionMap().put(name, action);
+        getActionMap().put(event.getId(), new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eventPublisher.publishEvent(event);
+            }
+        });
     }
 
     private void drawMap(Graphics2D g2) {
@@ -115,5 +110,14 @@ public class View extends JComponent {
         FrameRendererRegistry registry = manRendererRegistry.get(direction);
         ImageRenderer renderer = registry.get(imageIndex);
         renderer.render(g2, rect);
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
+
+    public void refresh() {
+        paintImmediately(0, 0, getWidth(), getHeight()); // instead of async repaint()
     }
 }

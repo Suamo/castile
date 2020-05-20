@@ -1,4 +1,4 @@
-package com.mine.castile.presentation.registry;
+package com.mine.castile.common.enums;
 
 public enum Direction {
     UP("up", 1),

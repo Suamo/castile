@@ -1,35 +1,41 @@
-package com.mine.castile.application.action;
+package com.mine.castile.application;
 
 import com.mine.castile.application.model.Man;
 import com.mine.castile.application.model.ManStatus;
 import com.mine.castile.application.model.Model;
 import com.mine.castile.common.dom.GameObjectDto;
+import com.mine.castile.common.enums.Direction;
+import com.mine.castile.common.events.CharacterMoveEvent;
 import com.mine.castile.data.dom.enums.GameObjectActionType;
 import com.mine.castile.data.dom.objects.GameObjectAction;
-import com.mine.castile.presentation.registry.Direction;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Controller;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
-public abstract class ActionCharacterAction extends AbstractAction {
+@Controller
+public class CharacterMoveController {
 
-    protected final Model model;
+    private Model model;
 
-    public ActionCharacterAction(Model model) {
+    public CharacterMoveController(Model model) {
         this.model = model;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    @EventListener
+    public void onEvent(CharacterMoveEvent event) {
         Man man = model.getMan();
-        interactWithObject();
 
         man.setImageIndex((man.getImageIndex() + 1) % 3);
+
+        Point point = man.getDirectionLocation();
+        boolean isStepIntoPossible = isStepIntoPossible(event, point);
+        proceedToDirection(event.getDirection(), isStepIntoPossible);
+
         model.setMan(man);
     }
 
-    protected void proceedToDirection(Direction direction) {
+    private void proceedToDirection(Direction direction, boolean isStepIntoPossible) {
         Direction oldDirection = model.getMan().getDirection();
         model.getMan().setDirection(direction);
         if (oldDirection != direction) {
@@ -40,7 +46,7 @@ public abstract class ActionCharacterAction extends AbstractAction {
         Point point = man.getDirectionLocation();
         GameObjectDto cell = model.get(point.x, point.y);
 
-        if (isStepIntoPossible(point) && !cell.isBlocking()) {
+        if (isStepIntoPossible && !cell.isBlocking()) {
             man.setLocation(point);
 
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
@@ -56,7 +62,7 @@ public abstract class ActionCharacterAction extends AbstractAction {
         }
     }
 
-    protected void delayAction(GameObjectAction action) {
+    private void delayAction(GameObjectAction action) {
         try {
             Integer delayPerAction = action.getDelayPerAction();
             Thread.sleep(delayPerAction);
@@ -65,7 +71,18 @@ public abstract class ActionCharacterAction extends AbstractAction {
         }
     }
 
-    protected abstract void interactWithObject();
+    private boolean isStepIntoPossible(CharacterMoveEvent event, Point point) {
+        switch (event.getDirection()) {
+            case UP:
+                return point.y >= 0;
+            case LEFT:
+                return point.x >= 0;
+            case RIGHT:
+                return point.x < model.getColumns();
+            case DOWN:
+                return point.y < model.getRows();
+        }
+        return false;
+    }
 
-    protected abstract boolean isStepIntoPossible(Point point);
 }

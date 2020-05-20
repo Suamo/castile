@@ -1,5 +1,6 @@
 package com.mine.castile.presentation.registry;
 
+import com.mine.castile.common.enums.Direction;
 import com.mine.castile.presentation.renderer.CastileResourceLoader;
 import com.mine.castile.presentation.renderer.ImageRenderer;
 import org.springframework.core.io.Resource;
