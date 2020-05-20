@@ -1,4 +1,4 @@
-package com.mine.castile.presentation.renderer;
+package com.mine.castile.presentation.renderer.sprites;
 
 import java.awt.image.BufferedImage;
 

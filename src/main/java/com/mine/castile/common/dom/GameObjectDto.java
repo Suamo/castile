@@ -1,4 +1,4 @@
-package com.mine.castile.application.dom;
+package com.mine.castile.common.dom;
 
 import com.mine.castile.data.dom.enums.GameObjectActionType;
 import com.mine.castile.data.dom.enums.GameObjectAppearType;

@@ -7,10 +7,10 @@ import com.mine.castile.application.action.movement.DownAction;
 import com.mine.castile.application.action.movement.LeftAction;
 import com.mine.castile.application.action.movement.RightAction;
 import com.mine.castile.application.action.movement.UpAction;
-import com.mine.castile.application.dom.GameObjectDto;
 import com.mine.castile.application.listener.RefreshListener;
 import com.mine.castile.application.model.Man;
 import com.mine.castile.application.model.Model;
+import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.data.persistence.MongoRepository;
 import com.mine.castile.presentation.PresentationConstants;
 import com.mine.castile.presentation.registry.CellRendererRegistry;
@@ -48,7 +48,6 @@ public class View extends JComponent {
         setBounds(5, 5, (int) size.getWidth(), (int) size.getHeight());
 
         configureInputs();
-        configureActions();
         configureListeners();
     }
 
@@ -69,40 +68,25 @@ public class View extends JComponent {
         return new Dimension(PresentationConstants.VIEWPORT_WIDTH, PresentationConstants.VIEWPORT_HEIGHT);
     }
 
-    protected void configureListeners() {
+    private void configureListeners() {
         model.addModelListaner(new RefreshListener(this));
     }
 
     private void configureInputs() {
-        InputMap inputMap = getInputMap();
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_UP, 0, true), Direction.UP);
-        inputMap.put(getKeyStroke(KeyEvent.VK_W, 0, true), Direction.UP);
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_LEFT, 0, true), Direction.LEFT);
-        inputMap.put(getKeyStroke(KeyEvent.VK_A, 0, true), Direction.LEFT);
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_RIGHT, 0, true), Direction.RIGHT);
-        inputMap.put(getKeyStroke(KeyEvent.VK_D, 0, true), Direction.RIGHT);
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_DOWN, 0, true), Direction.DOWN);
-        inputMap.put(getKeyStroke(KeyEvent.VK_S, 0, true), Direction.DOWN);
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_SPACE, 0, true), "gather");
-        inputMap.put(getKeyStroke(KeyEvent.VK_ALT, 0, true), "hit");
-
-        inputMap.put(getKeyStroke(KeyEvent.VK_I, 0, true), "inventory");
+        bindKey(new UpAction(model), "up", KeyEvent.VK_UP, KeyEvent.VK_W);
+        bindKey(new LeftAction(model), "left", KeyEvent.VK_LEFT, KeyEvent.VK_A);
+        bindKey(new RightAction(model), "right", KeyEvent.VK_RIGHT, KeyEvent.VK_D);
+        bindKey(new DownAction(model), "down", KeyEvent.VK_DOWN, KeyEvent.VK_S);
+        bindKey(new GatherAction(model, repository), "gather", KeyEvent.VK_SPACE);
+        bindKey(new HitAction(model, repository), "hit", KeyEvent.VK_ALT);
+        bindKey(new InventoryAction(inventoryPanel), "inventory", KeyEvent.VK_I);
     }
 
-    private void configureActions() {
-        ActionMap actionMap = getActionMap();
-        actionMap.put(Direction.UP, new UpAction(model));
-        actionMap.put(Direction.LEFT, new LeftAction(model));
-        actionMap.put(Direction.RIGHT, new RightAction(model));
-        actionMap.put(Direction.DOWN, new DownAction(model));
-        actionMap.put("gather", new GatherAction(model, repository));
-        actionMap.put("hit", new HitAction(model, repository));
-        actionMap.put("inventory", new InventoryAction(inventoryPanel));
+    private void bindKey(AbstractAction action, Object name, int... keys) {
+        for (int key : keys) {
+            getInputMap().put(getKeyStroke(key, 0, true), name);
+        }
+        getActionMap().put(name, action);
     }
 
     private void drawMap(Graphics2D g2) {

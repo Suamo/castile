@@ -1,6 +1,6 @@
 package com.mine.castile.application.io;
 
-import com.mine.castile.application.dom.GameObjectDto;
+import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.data.dom.enums.GameObjectAppearType;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.data.dom.objects.GameObjectAppear;

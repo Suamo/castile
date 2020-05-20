@@ -1,6 +1,6 @@
 package com.mine.castile.presentation.registry;
 
-import com.mine.castile.application.dom.GameObjectDto;
+import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.data.persistence.MongoRepository;
 import com.mine.castile.presentation.renderer.CastileResourceLoader;

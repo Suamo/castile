@@ -1,7 +1,7 @@
 package com.mine.castile.application.model;
 
-import com.mine.castile.application.dom.GameObjectDto;
 import com.mine.castile.application.io.MazeLoader;
+import com.mine.castile.common.dom.GameObjectDto;
 import org.apache.commons.lang.Validate;
 import org.springframework.stereotype.Component;
 

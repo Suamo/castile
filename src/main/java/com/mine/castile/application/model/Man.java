@@ -1,6 +1,6 @@
 package com.mine.castile.application.model;
 
-import com.mine.castile.application.dom.loot.LootMappingDropDto;
+import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.presentation.registry.Direction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -1,12 +1,12 @@
 package com.mine.castile.application.action.interaction;
 
 import com.mine.castile.application.action.ActionCharacterAction;
-import com.mine.castile.application.dom.GameObjectDto;
-import com.mine.castile.application.dom.loot.LootMappingActionsDto;
-import com.mine.castile.application.dom.loot.LootMappingDropDto;
 import com.mine.castile.application.model.Man;
 import com.mine.castile.application.model.ManStatus;
 import com.mine.castile.application.model.Model;
+import com.mine.castile.common.dom.GameObjectDto;
+import com.mine.castile.common.dom.loot.LootMappingActionsDto;
+import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.data.dom.enums.GameObjectActionType;
 import com.mine.castile.data.dom.objects.GameObjectAction;
 import com.mine.castile.data.persistence.MongoRepository;

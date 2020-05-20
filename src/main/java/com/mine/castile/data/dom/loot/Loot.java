@@ -1,4 +1,4 @@
-package com.mine.castile.data.dom;
+package com.mine.castile.data.dom.loot;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

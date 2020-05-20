@@ -1,15 +1,11 @@
 package com.mine.castile.data.persistence;
 
 import com.google.gson.Gson;
-import com.mine.castile.application.dom.GameObjectDto;
-import com.mine.castile.application.dom.loot.LootMappingActionsDto;
-import com.mine.castile.application.dom.loot.LootMappingDropDto;
-import com.mine.castile.data.dom.Loot;
+import com.mine.castile.common.dom.GameObjectDto;
+import com.mine.castile.common.dom.loot.LootMappingActionsDto;
+import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.data.dom.enums.Season;
-import com.mine.castile.data.dom.loot.LootMapping;
-import com.mine.castile.data.dom.loot.LootMappingAction;
-import com.mine.castile.data.dom.loot.LootMappingDrop;
-import com.mine.castile.data.dom.loot.LootMappingSeason;
+import com.mine.castile.data.dom.loot.*;
 import com.mine.castile.data.dom.objects.GameObject;
 import com.mine.castile.presentation.renderer.CastileResourceLoader;
 import org.springframework.core.io.Resource;

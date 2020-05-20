@@ -1,4 +1,4 @@
-package com.mine.castile.application.dom.loot;
+package com.mine.castile.common.dom.loot;
 
 import java.util.HashMap;
 import java.util.List;

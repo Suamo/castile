@@ -1,8 +1,8 @@
 package com.mine.castile.application.model;
 
-import com.mine.castile.application.dom.GameObjectDto;
 import com.mine.castile.application.listener.IModelListener;
 import com.mine.castile.application.listener.ModelEvent;
+import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.presentation.PresentationConstants;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import java.awt.*;
 
 @Component
 public class Model {
-    protected EventListenerList listenerList = new EventListenerList();
+    private EventListenerList listenerList = new EventListenerList();
 
     private Maze maze;
     private Man man;

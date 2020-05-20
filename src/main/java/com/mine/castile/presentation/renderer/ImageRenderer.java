@@ -1,5 +1,7 @@
 package com.mine.castile.presentation.renderer;
 
+import com.mine.castile.presentation.renderer.sprites.SpriteSheet;
+import com.mine.castile.presentation.renderer.sprites.SpriteSheetBuilder;
 import org.springframework.core.io.Resource;
 
 import javax.imageio.ImageIO;
