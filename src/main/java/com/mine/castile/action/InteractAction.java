@@ -7,6 +7,7 @@ import com.mine.castile.dom.entity.objects.GameObjectAction;
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
+import com.mine.castile.model.ManStatus;
 import com.mine.castile.persistence.MongoRepository;
 
 import java.awt.*;
@@ -49,10 +50,11 @@ public abstract class InteractAction extends ActionImpl {
             performTransformation();
         }
 
-        man.reduceEnergy(action.getEnergyPerAction());
-        int energy = man.getEnergy();
+        ManStatus status = man.getManStatus();
+        man.spendEnergy(action.getEnergyPerAction());
+        int energy = status.getEnergy();
         if (energy <= 0) {
-            man.setEnergy(Man.ENERRY_BASE);
+            status.setEnergy(Man.ENERRY_BASE);
             model.nextSeason();
         }
     }

@@ -5,6 +5,7 @@ import com.mine.castile.dom.entity.objects.GameObjectAction;
 import com.mine.castile.dom.enums.GameObjectActionType;
 import com.mine.castile.model.IModel;
 import com.mine.castile.model.Man;
+import com.mine.castile.model.ManStatus;
 import com.mine.castile.registry.Direction;
 
 import javax.swing.*;
@@ -45,10 +46,11 @@ public abstract class ActionImpl extends AbstractAction {
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
             delayAction(action);
 
-            man.reduceEnergy(action.getEnergyPerAction());
-            int energy = man.getEnergy();
+            man.spendEnergy(action.getEnergyPerAction());
+            ManStatus manStatus = man.getManStatus();
+            int energy = manStatus.getEnergy();
             if (energy <= 0) {
-                man.setEnergy(Man.ENERRY_BASE);
+                manStatus.setEnergy(Man.ENERRY_BASE);
                 model.nextSeason();
             }
         }

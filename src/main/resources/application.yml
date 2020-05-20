@@ -10,6 +10,11 @@ game:
             columns: 16
         character:
             coordinates: "1:6"
+            energy: 50
+            food: 50
+            water: 50
+            mutation-resistance: 50
+            inspiration: 50
         castile:
             coordinates: "1:7"
             size:

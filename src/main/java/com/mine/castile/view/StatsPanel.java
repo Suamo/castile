@@ -1,6 +1,7 @@
 package com.mine.castile.view;
 
 import com.mine.castile.model.IModel;
+import com.mine.castile.model.ManStatus;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -14,14 +15,20 @@ import static javax.swing.BorderFactory.createStrokeBorder;
 public class StatsPanel extends JPanel {
 
     public StatsPanel(IModel model) {
-        setLayout(new GridLayout(2, 1));
+        setLayout(new GridLayout(0, 1));
 
         setOpaque(true);
-        setBounds(20, 20, 170, 50);
+        setBounds(20, 20, 170, 130);
         setBorder(createStrokeBorder(new BasicStroke(3), new Color(192, 0, 0)));
 
-        addInfo(model, "Energy: ", () -> "" + model.getMan().getEnergy());
         addInfo(model, "Season: ", () -> model.getSeason().name());
+
+        ManStatus status = model.getMan().getManStatus();
+        addInfo(model, "Energy: ", () -> "" + status.getEnergy());
+        addInfo(model, "Food: ", () -> "" + status.getFood());
+        addInfo(model, "Water: ", () -> "" + status.getWater());
+        addInfo(model, "MutRes: ", () -> "" + status.getMutationResistance());
+        addInfo(model, "Inspiration: ", () -> "" + status.getInspiration());
     }
 
     private void addInfo(IModel model, String title, Supplier<String> content) {
@@ -44,7 +51,6 @@ public class StatsPanel extends JPanel {
         JLabel label = new JLabel(text);
         label.setVerticalAlignment(JLabel.TOP);
         label.setHorizontalAlignment(JLabel.LEFT);
-//        label.setBorder(createStrokeBorder(new BasicStroke(3), new Color(90, 93, 255)));
         label.setFont(Font.decode("Arial-BOLD-18"));
         if (isTitle) {
             label.setForeground(Color.BLUE);

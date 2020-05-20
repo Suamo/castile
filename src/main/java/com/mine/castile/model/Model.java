@@ -19,17 +19,11 @@ public class Model implements IModel {
     private Man man;
     private Season season;
 
-    public Model(Maze maze,
-                 @Value("${game.init.season}") Season initialSeason,
-                 @Value("${game.init.character.coordinates}") String characterCoordinates) {
+    public Model(Maze maze, Man man,
+                 @Value("${game.init.season}") Season initialSeason) {
         this.maze = maze;
+        this.man = man;
         this.season = initialSeason;
-        addCharacter(characterCoordinates);
-    }
-
-    private void addCharacter(String characterCoordinates) {
-        int[] coordinates = getCoordinates(characterCoordinates);
-        man = new Man(coordinates[1] - 1, coordinates[0] - 1);
     }
 
     public Man getMan() {
@@ -80,11 +74,6 @@ public class Model implements IModel {
                 ((IModelListener) listeners[i + 1]).modelChanged(e);
             }
         }
-    }
-
-    private int[] getCoordinates(String characterCoordinates) {
-        String[] split = characterCoordinates.split(":");
-        return new int[]{Integer.parseInt(split[0]), Integer.parseInt(split[1])};
     }
 
     @Override

@@ -2,26 +2,38 @@ package com.mine.castile.model;
 
 import com.mine.castile.dom.dto.loot.LootMappingDropDto;
 import com.mine.castile.registry.Direction;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Man {
     public static final int ENERRY_BASE = 50;
+
     private int column;
     private int row;
     private int imageIndex;
     private Direction direction;
-    private int energy;
+    private ManStatus manStatus;
+
     private List<LootMappingDropDto> inventory = new ArrayList<>();
 
-    public Man(int column, int row) {
-        this.column = column;
-        this.row = row;
-        imageIndex = 2;
-        direction = Direction.DOWN;
-        energy = ENERRY_BASE;
+    public Man(@Value("${game.init.character.coordinates}") String characterCoordinates,
+               ManStatus manStatus) {
+        this.manStatus = manStatus;
+        this.imageIndex = 2;
+        this.direction = Direction.DOWN;
+        setCoordinates(characterCoordinates);
+    }
+
+    private void setCoordinates(@Value("${game.init.character.coordinates}") String characterCoordinates) {
+        String[] split = characterCoordinates.split(":");
+        int[] coordinates = new int[]{Integer.parseInt(split[0]), Integer.parseInt(split[1])};
+        this.column = coordinates[1] - 1;
+        this.row = coordinates[0] - 1;
     }
 
     public int getColumn() {
@@ -72,19 +84,15 @@ public class Man {
         row = location.y;
     }
 
-    public int getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public void reduceEnergy(int energySpent) {
-        energy -= energySpent;
-    }
-
     public List<LootMappingDropDto> getInventory() {
         return inventory;
+    }
+
+    public ManStatus getManStatus() {
+        return manStatus;
+    }
+
+    public void spendEnergy(Integer energySpent) {
+
     }
 }
