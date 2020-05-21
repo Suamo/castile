@@ -1,6 +1,5 @@
 package com.mine.castile.application.model;
 
-import com.mine.castile.application.listener.ModelEvent;
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.events.ModelChangedEvent;
 import com.mine.castile.data.dom.enums.Season;
@@ -32,7 +31,7 @@ public class Model implements ApplicationEventPublisherAware {
 
     public void setMan(Man man) {
         this.man = man;
-        fireModelChanged(new ModelEvent(this));
+        eventPublisher.publishEvent(new ModelChangedEvent());
     }
 
     public Rectangle getViewportRect() {
@@ -59,17 +58,13 @@ public class Model implements ApplicationEventPublisherAware {
         return maze.getColumns();
     }
 
-    protected void fireModelChanged(ModelEvent e) {
-        eventPublisher.publishEvent(new ModelChangedEvent());
-    }
-
     public Season getSeason() {
         return season;
     }
 
     public void nextSeason() {
         this.season = this.season.getNextSeason();
-        fireModelChanged(new ModelEvent(this));
+        eventPublisher.publishEvent(new ModelChangedEvent());
         System.out.println("Its " + season.name() + " now!");
     }
 

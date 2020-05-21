@@ -52,7 +52,7 @@ public class CharacterMoveController {
             GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
             delayAction(action);
 
-            man.spendEnergy(action.getEnergyPerAction());
+            man.spendEnergy(action.getEnergyPerAction(), model.getSeason());
             ManStatus manStatus = man.getManStatus();
             int energy = manStatus.getEnergy();
             if (energy <= 0) {

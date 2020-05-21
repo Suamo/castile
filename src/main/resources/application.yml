@@ -25,3 +25,16 @@ game:
         loot: "classpath*:/loot/*.json"
         lootMapping: "classpath*:/loot-mapping/*.json"
         images: "classpath*:/images/*.png"
+    resources:
+        food:
+            init: 512
+            spending: "1,1,1,3"
+        water:
+            init: 512
+            spending: "1,3,1,1"
+        mutRes:
+            init: 512
+            spending: "3,1,3,1"
+        inspiration:
+            init: 512
+            spending: "0,0,0,0"

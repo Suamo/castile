@@ -63,7 +63,7 @@ public class ObjectInteractionController {
         }
 
         ManStatus status = man.getManStatus();
-        man.spendEnergy(action.getEnergyPerAction());
+        man.spendEnergy(action.getEnergyPerAction(), model.getSeason());
         int energy = status.getEnergy();
         if (energy <= 0) {
             status.setEnergy(Man.ENERRY_BASE);

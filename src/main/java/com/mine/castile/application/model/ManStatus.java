@@ -21,6 +21,12 @@ public class ManStatus {
     @Value("${game.init.character.inspiration}")
     private int inspiration;
 
+    private ResourcesConsumptionRules consumptionRules;
+
+    public ManStatus(ResourcesConsumptionRules consumptionRules) {
+        this.consumptionRules = consumptionRules;
+    }
+
     public int getEnergy() {
         return energy;
     }
@@ -59,5 +65,9 @@ public class ManStatus {
 
     public void setInspiration(int inspiration) {
         this.inspiration = inspiration;
+    }
+
+    public ResourcesConsumptionRules getConsumptionRules() {
+        return consumptionRules;
     }
 }

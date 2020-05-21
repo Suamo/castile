@@ -2,6 +2,7 @@ package com.mine.castile.application.model;
 
 import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.common.enums.Direction;
+import com.mine.castile.data.dom.enums.Season;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -92,7 +93,20 @@ public class Man {
         return manStatus;
     }
 
-    public void spendEnergy(Integer energySpent) {
+    public void spendEnergy(Integer energySpent, Season season) {
 
+        int energy = manStatus.getEnergy() - energySpent;
+
+        int food = manStatus.getFood() - manStatus.getConsumptionRules().getFoodSpening(season);
+        int water = manStatus.getWater() - manStatus.getConsumptionRules().getWaterSpening(season);
+
+        int mutRes = manStatus.getMutationResistance() - manStatus.getConsumptionRules().getMutResSpening(season);
+        int inspiration = manStatus.getInspiration() - manStatus.getConsumptionRules().getInspirationSpening(season);
+
+        manStatus.setEnergy(energy);
+        manStatus.setFood(food);
+        manStatus.setWater(water);
+        manStatus.setMutationResistance(mutRes);
+        manStatus.setInspiration(inspiration);
     }
 }
