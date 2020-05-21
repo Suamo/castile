@@ -1,4 +1,4 @@
-package com.mine.castile.application.model;
+package com.mine.castile.application.dom;
 
 import com.mine.castile.application.io.MazeLoader;
 import com.mine.castile.common.dom.GameObjectDto;

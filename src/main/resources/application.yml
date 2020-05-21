@@ -11,10 +11,10 @@ game:
         character:
             coordinates: "1:6"
             energy: 50
-            food: 50
-            water: 50
-            mutation-resistance: 50
-            inspiration: 50
+            food: 512
+            water: 512
+            mutation-resistance: 512
+            inspiration: 512
         castile:
             coordinates: "1:7"
             size:
@@ -25,16 +25,8 @@ game:
         loot: "classpath*:/loot/*.json"
         lootMapping: "classpath*:/loot-mapping/*.json"
         images: "classpath*:/images/*.png"
-    resources:
-        food:
-            init: 512
-            spending: "1,1,1,3"
-        water:
-            init: 512
-            spending: "1,3,1,1"
-        mutRes:
-            init: 512
-            spending: "3,1,3,1"
-        inspiration:
-            init: 512
-            spending: "0,0,0,0"
+    resources-spending:
+        food: "1,1,1,3"
+        water: "1,3,1,1"
+        mutRes: "3,1,3,1"
+        inspiration: "0,0,0,0"

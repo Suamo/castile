@@ -1,8 +1,8 @@
 package com.mine.castile.application;
 
-import com.mine.castile.application.model.Man;
-import com.mine.castile.application.model.ManStatus;
-import com.mine.castile.application.model.Model;
+import com.mine.castile.application.dom.Man;
+import com.mine.castile.application.dom.ManStatus;
+import com.mine.castile.application.dom.Model;
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.enums.Direction;
 import com.mine.castile.common.events.CharacterMoveEvent;

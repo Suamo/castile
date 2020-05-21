@@ -1,6 +1,6 @@
 package com.mine.castile.presentation;
 
-import com.mine.castile.application.model.Model;
+import com.mine.castile.application.dom.Model;
 import com.mine.castile.common.events.InventoryRequestEvent;
 import com.mine.castile.common.events.ModelChangedEvent;
 import com.mine.castile.presentation.view.InventoryPanel;

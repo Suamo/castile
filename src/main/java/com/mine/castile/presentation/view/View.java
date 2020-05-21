@@ -1,7 +1,7 @@
 package com.mine.castile.presentation.view;
 
-import com.mine.castile.application.model.Man;
-import com.mine.castile.application.model.Model;
+import com.mine.castile.application.dom.Man;
+import com.mine.castile.application.dom.Model;
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.enums.Direction;
 import com.mine.castile.common.enums.ObjectInteraction;

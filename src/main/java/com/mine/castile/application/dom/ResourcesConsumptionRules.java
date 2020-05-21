@@ -1,4 +1,4 @@
-package com.mine.castile.application.model;
+package com.mine.castile.application.dom;
 
 import com.mine.castile.data.dom.enums.Season;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,28 +10,16 @@ import java.util.Map;
 @Component
 public class ResourcesConsumptionRules {
 
-    @Value("${game.resources.food.init}")
-    private int foodInitialValue;
-
-    @Value("${game.resources.water.init}")
-    private int waterInitialValue;
-
-    @Value("${game.resources.mutRes.init}")
-    private int mutResInitialValue;
-
-    @Value("${game.resources.inspiration.init}")
-    private int inspirationInitialValue;
-
     private Map<Season, Integer> foodSpending = new HashMap<>();
     private Map<Season, Integer> waterSpending = new HashMap<>();
     private Map<Season, Integer> mutResSpending = new HashMap<>();
     private Map<Season, Integer> inspirationSpending = new HashMap<>();
 
     public ResourcesConsumptionRules(
-            @Value("${game.resources.food.spending}") String foodSpening,
-            @Value("${game.resources.water.spending}") String waterSpening,
-            @Value("${game.resources.mutRes.spending}") String mutResSpening,
-            @Value("${game.resources.inspiration.spending}") String inspirationSpening) {
+            @Value("${game.resources-spending.food}") String foodSpening,
+            @Value("${game.resources-spending.water}") String waterSpening,
+            @Value("${game.resources-spending.mutRes}") String mutResSpening,
+            @Value("${game.resources-spending.inspiration}") String inspirationSpening) {
 
         String[] food = foodSpening.split(",");
         String[] water = waterSpening.split(",");
@@ -64,7 +52,7 @@ public class ResourcesConsumptionRules {
     }
 
     private int getSeasonValue(String[] values, Season season) {
-        int index = -1;
+        int index;
         switch (season) {
             case spring1:
             case spring2:
