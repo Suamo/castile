@@ -30,10 +30,11 @@ public class CellGenerator {
     }
 
     public GameObjectDto evolveCell(GameObjectDto currentDto, Season season) {
-        Map<String, Integer> possibleObjects = currentDto.getEvolutionToObject();
+        String id = currentDto.getId();
+        Map<String, Integer> possibleObjects = cache.get(season).get(id).getEvolutionToObject();
 
-        String id = getEvolutionId(possibleObjects, currentDto.getId());
-        return cache.get(season).get(id).doClone();
+        String newId = getEvolutionId(possibleObjects, id);
+        return cache.get(season).get(newId).doClone();
     }
 
     private String getEvolutionId(Map<String, Integer> possibleObjects, String defaultId) {

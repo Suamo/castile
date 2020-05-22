@@ -21,6 +21,6 @@ public class GameObject {
     private Boolean blocking;
 
     private Map<GameObjectActionType, List<GameObjectAction>> actions;
-    private String evolutionToObject;
+    private List<GameObjectEvolution> evolution;
 
 }

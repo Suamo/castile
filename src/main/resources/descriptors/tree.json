@@ -1,6 +1,6 @@
 {
   "_id": "tree",
-  "appearOnStart": 10,
+  "appearOnStart": 100,
   "appearInGame": "chance plain:10",
   "blocking": false,
   "actions": {
@@ -34,5 +34,13 @@
       }
     ]
   },
-  "evolutionToObject": "chance tree:50 tree-apple:50"
+  "evolution": [
+    {
+      "toObject": "chance tree:100"
+    },
+    {
+      "onSeason": "summer1,summer2,summer3",
+      "toObject": "chance tree-apple:50 tree:50"
+    }
+  ]
 }

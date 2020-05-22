@@ -7,6 +7,7 @@ import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.data.dom.loot.*;
 import com.mine.castile.data.dom.objects.GameObject;
+import com.mine.castile.data.dom.objects.GameObjectEvolution;
 import com.mine.castile.presentation.renderer.CastileResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -20,7 +21,7 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.*;
 
-import static com.mine.castile.data.persistence.DtoConversionUtils.parceChances;
+import static com.mine.castile.data.persistence.DtoConversionUtils.parseChances;
 import static com.mine.castile.data.persistence.DtoConversionUtils.prepareActions;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -95,12 +96,27 @@ public class MongoRepository {
         GameObjectDto dto = new GameObjectDto();
         dto.setId(entity.get_id());
         dto.setAppearOnStart(entity.getAppearOnStart());
-        dto.setAppearInGame(parceChances(entity.getAppearInGame()));
+        dto.setAppearInGame(parseChances(entity.getAppearInGame()));
         dto.setBlocking(entity.getBlocking());
         dto.setActions(prepareActions(entity, season));
-        dto.setEvolutionToObject(parceChances(entity.getEvolutionToObject()));
+        dto.setEvolutionToObject(prepareEvolution(entity.getEvolution(), season));
         return dto;
     }
+
+    private Map<String, Integer> prepareEvolution(List<GameObjectEvolution> evolution, Season season) {
+        if (evolution == null) {
+            return null;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        for (GameObjectEvolution gameObjectEvolution : evolution) {
+            String onSeason = gameObjectEvolution.getOnSeason();
+            if (onSeason == null || onSeason.contains(season.name())) {
+                map.putAll(parseChances(gameObjectEvolution.getToObject()));
+            }
+        }
+        return map;
+    }
+
 
     private Map<Season, Map<String, Loot>> lootToDtos(List<Loot> entities) {
         Map<Season, Map<String, Loot>> dtos = new HashMap<>();

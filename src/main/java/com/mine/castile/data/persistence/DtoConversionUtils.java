@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DtoConversionUtils {
 
-    public static Map<String, Integer> parceChances(String rawChances) {
+    public static Map<String, Integer> parseChances(String rawChances) {
         if (rawChances == null || !rawChances.startsWith("chance ")) {
             return null;
         }

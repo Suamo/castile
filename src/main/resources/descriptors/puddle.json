@@ -27,5 +27,9 @@
       }
     ]
   },
-  "evolutionToObject": "plain:100"
+  "evolution": [
+    {
+      "toObject": "chance plain:100"
+    }
+  ]
 }

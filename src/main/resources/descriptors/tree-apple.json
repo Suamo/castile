@@ -30,5 +30,13 @@
       }
     ]
   },
-  "evolutionToObject": "chance tree:50 tree-apple:50"
+  "evolution": [
+    {
+      "toObject": "chance tree-apple:100"
+    },
+    {
+      "onSeason": "winter1,winter2,winter3",
+      "toObject": "chance tree:50 tree-apple:50"
+    }
+  ]
 }
