@@ -33,5 +33,6 @@
         "whenNoActionTransformsTo": "plain"
       }
     ]
-  }
+  },
+  "evolutionToObject": "chance tree:50 tree-apple:50"
 }

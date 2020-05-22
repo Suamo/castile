@@ -30,5 +30,5 @@
       }
     ]
   },
-  "evolutionToObject": "chance tree:20 tree-apple:80"
+  "evolutionToObject": "chance tree:50 tree-apple:50"
 }
