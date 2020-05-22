@@ -6,12 +6,14 @@ import com.mine.castile.application.dom.Model;
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.enums.Direction;
 import com.mine.castile.common.events.CharacterMoveEvent;
-import com.mine.castile.data.dom.enums.GameObjectActionType;
+import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.data.dom.objects.GameObjectAction;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 import java.awt.*;
+
+import static com.mine.castile.data.dom.enums.GameObjectActionType.stepInto;
 
 @Controller
 public class CharacterMoveController {
@@ -49,10 +51,12 @@ public class CharacterMoveController {
         if (isStepIntoPossible && !cell.isBlocking()) {
             man.setLocation(point);
 
-            GameObjectAction action = cell.getActions().get(GameObjectActionType.stepInto);
+            Season season = model.getSeason();
+
+            GameObjectAction action = cell.getActions().get(stepInto);
             delayAction(action);
 
-            man.spendEnergy(action.getEnergyPerAction(), model.getSeason());
+            man.spendEnergy(action.getEnergyPerAction(), season);
             ManStatus manStatus = man.getManStatus();
             int energy = manStatus.getEnergy();
             if (energy <= 0) {

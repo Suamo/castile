@@ -1,50 +1,21 @@
 package com.mine.castile.data.dom.objects;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameObjectAction {
+
+    private String seasons;
     private Integer count;
     private Integer energyPerAction;
     private Integer delayPerAction;
     private String whenNoActionTransformsTo;
 
-    public GameObjectAction() {
-    }
-
-    public GameObjectAction(Integer count, Integer energyPerAction, Integer delayPerAction, String whenNoActionTransformsTo) {
-        this.count = count;
-        this.energyPerAction = energyPerAction;
-        this.delayPerAction = delayPerAction;
-        this.whenNoActionTransformsTo = whenNoActionTransformsTo;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public Integer getEnergyPerAction() {
-        return energyPerAction;
-    }
-
-    public void setEnergyPerAction(Integer energyPerAction) {
-        this.energyPerAction = energyPerAction;
-    }
-
-    public Integer getDelayPerAction() {
-        return delayPerAction;
-    }
-
-    public void setDelayPerAction(Integer delayPerAction) {
-        this.delayPerAction = delayPerAction;
-    }
-
-    public String getWhenNoActionTransformsTo() {
-        return whenNoActionTransformsTo;
-    }
-
-    public void setWhenNoActionTransformsTo(String whenNoActionTransformsTo) {
-        this.whenNoActionTransformsTo = whenNoActionTransformsTo;
+    public GameObjectAction doClone() {
+        return new GameObjectAction(seasons, count, energyPerAction, delayPerAction, whenNoActionTransformsTo);
     }
 }

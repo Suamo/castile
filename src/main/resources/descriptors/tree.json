@@ -1,43 +1,37 @@
 {
   "_id": "tree",
-  "appear": {
-    "onStart": {
-      "chance": 10
-    },
-    "inGame": {
-      "chance": 10,
-      "replaceObjects": "plain"
-    }
-  },
+  "appearOnStart": 10,
+  "appearInGame": "chance plain:10",
   "blocking": false,
   "actions": {
-    "stepInto": {
-      "count": 1,
-      "energyPerAction": 1,
-      "delayPerAction": 500
-    },
-    "gather": {
-      "count": 3,
-      "energyPerAction": 3,
-      "delayPerAction": 500
-    },
-    "hits": {
-      "count": 3,
-      "energyPerAction": 3,
-      "delayPerAction": 500,
-      "whenNoActionTransformsTo": "plain"
-    }
-  },
-  "evolutionToObject": "plain",
-  "seasonOverrides": {
-    "spring1": {
-      "actions": {
-        "gather": {
-          "count": 3,
-          "energyPerAction": 2,
-          "delayPerAction": 500
-        }
+    "stepInto": [
+      {
+        "count": 1,
+        "energyPerAction": 1,
+        "delayPerAction": 500
       }
-    }
+    ],
+    "gather": [
+      {
+        "seasons": "spring1,spring2,spring3",
+        "count": 3,
+        "energyPerAction": 3,
+        "delayPerAction": 500
+      },
+      {
+        "seasons": "summer1,summer2,summer3,fall1,fall2,fall3",
+        "count": 1,
+        "energyPerAction": 10,
+        "delayPerAction": 500
+      }
+    ],
+    "hits": [
+      {
+        "count": 3,
+        "energyPerAction": 3,
+        "delayPerAction": 500,
+        "whenNoActionTransformsTo": "plain"
+      }
+    ]
   }
 }

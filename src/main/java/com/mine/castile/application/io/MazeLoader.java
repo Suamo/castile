@@ -1,6 +1,7 @@
 package com.mine.castile.application.io;
 
 import com.mine.castile.common.dom.GameObjectDto;
+import com.mine.castile.data.dom.enums.Season;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,9 @@ public class MazeLoader {
     @Value("${game.init.castile.size.columns}")
     private int castileSizeColumns;
 
+    @Value("${game.init.season}")
+    private Season initialSeason;
+
     private CellGenerator cellGenerator;
 
     public MazeLoader(CellGenerator cellGenerator) {
@@ -32,7 +36,7 @@ public class MazeLoader {
         GameObjectDto[][] cells = new GameObjectDto[rows][columns];
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                cells[row][column] = cellGenerator.generateCell();
+                cells[row][column] = cellGenerator.evolveCell(initialSeason);
             }
         }
         String[] coordinates = castileCoordinates.split(":");

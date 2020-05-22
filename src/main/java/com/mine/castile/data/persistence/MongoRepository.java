@@ -20,6 +20,8 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.*;
 
+import static com.mine.castile.data.persistence.DtoConversionUtils.parceChances;
+import static com.mine.castile.data.persistence.DtoConversionUtils.prepareActions;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Repository
@@ -82,11 +84,22 @@ public class MongoRepository {
         for (GameObject entity : entities) {
             for (Season season : Season.values()) {
                 Map<String, GameObjectDto> map = dtos.getOrDefault(season, new HashMap<>());
-                map.put(entity.get_id(), new GameObjectDto(entity, season));
+                map.put(entity.get_id(), objectToDto(entity, season));
                 dtos.put(season, map);
             }
         }
         return dtos;
+    }
+
+    private GameObjectDto objectToDto(GameObject entity, Season season) {
+        GameObjectDto dto = new GameObjectDto();
+        dto.setId(entity.get_id());
+        dto.setAppearOnStart(entity.getAppearOnStart());
+        dto.setAppearInGame(parceChances(entity.getAppearInGame()));
+        dto.setBlocking(entity.getBlocking());
+        dto.setActions(prepareActions(entity, season));
+        dto.setEvolutionToObject(parceChances(entity.getEvolutionToObject()));
+        return dto;
     }
 
     private Map<Season, Map<String, Loot>> lootToDtos(List<Loot> entities) {

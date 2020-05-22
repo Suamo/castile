@@ -2,6 +2,7 @@ package com.mine.castile.application.dom;
 
 import com.mine.castile.common.dom.GameObjectDto;
 import com.mine.castile.common.events.ModelChangedEvent;
+import com.mine.castile.common.events.WorldEvolutionEvent;
 import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.presentation.PresentationConstants;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +65,7 @@ public class Model implements ApplicationEventPublisherAware {
 
     public void nextSeason() {
         this.season = this.season.getNextSeason();
+        eventPublisher.publishEvent(new WorldEvolutionEvent());
         eventPublisher.publishEvent(new ModelChangedEvent());
         System.out.println("Its " + season.name() + " now!");
     }

@@ -89,7 +89,7 @@ public class View extends JComponent implements ApplicationEventPublisherAware {
         for (int row = location.y; row < location.y + 2 * PresentationConstants.VIEW_RADIX + 2; row++) {
             for (int column = location.x; column < location.x + 2 * PresentationConstants.VIEW_RADIX + 2; column++) {
                 GameObjectDto cell = model.get(column, row);
-                ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.get_id());
+                ImageRenderer renderer = rendererRegistry.get(model.getSeason(), cell.getId());
                 int x = (column - location.x) * PresentationConstants.CELL_WIDTH;
                 int y = (row - location.y) * PresentationConstants.CELL_HEIGHT;
                 Rectangle rect = new Rectangle(x, y, PresentationConstants.CELL_WIDTH, PresentationConstants.CELL_HEIGHT);

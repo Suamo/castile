@@ -10,7 +10,7 @@ game:
             columns: 16
         character:
             coordinates: "1:6"
-            energy: 50
+            energy: 20
             food: 512
             water: 512
             mutation-resistance: 512

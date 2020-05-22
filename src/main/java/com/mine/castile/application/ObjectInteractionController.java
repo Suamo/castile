@@ -8,6 +8,7 @@ import com.mine.castile.common.dom.loot.LootMappingActionsDto;
 import com.mine.castile.common.dom.loot.LootMappingDropDto;
 import com.mine.castile.common.events.ObjectInteractionEvent;
 import com.mine.castile.data.dom.enums.GameObjectActionType;
+import com.mine.castile.data.dom.enums.Season;
 import com.mine.castile.data.dom.objects.GameObjectAction;
 import com.mine.castile.data.persistence.MongoRepository;
 import org.springframework.context.event.EventListener;
@@ -42,18 +43,19 @@ public class ObjectInteractionController {
         Man man = model.getMan();
 
         Point directionLocation = man.getDirectionLocation();
-        GameObjectDto cell = model.get(directionLocation.x, directionLocation.y);
+        GameObjectDto dto = model.get(directionLocation.x, directionLocation.y);
 
-        GameObjectAction action = cell.getActions().get(actionType);
-        if (action == null || action.getCount() == null || action.getCount() == 0) {
+        Season season = model.getSeason();
+        if (!isActionAvailable(dto.getActions(), actionType, season)) {
             System.out.println("Nothing to gather");
             return;
         }
+        GameObjectAction action = dto.getActions().get(actionType);
 
         delayAction(action);
 
         Integer count = action.getCount();
-        tryForLoot(actionType, cell, count);
+        tryForLoot(actionType, dto, count);
 
         System.out.println(String.format("Changed %s count from %s to %s", actionType.name(), count, count - 1));
         action.setCount(--count);
@@ -63,12 +65,24 @@ public class ObjectInteractionController {
         }
 
         ManStatus status = man.getManStatus();
-        man.spendEnergy(action.getEnergyPerAction(), model.getSeason());
+        man.spendEnergy(action.getEnergyPerAction(), season);
         int energy = status.getEnergy();
         if (energy <= 0) {
             status.setEnergy(Man.ENERRY_BASE);
             model.nextSeason();
         }
+    }
+
+    private boolean isActionAvailable(Map<GameObjectActionType, GameObjectAction> actions,
+                                      GameObjectActionType actionType, Season season) {
+        if (actions == null) {
+            return false;
+        }
+        GameObjectAction action = actions.get(actionType);
+        if (action == null) {
+            return false;
+        }
+        return action.getCount() != null && action.getCount() != 0;
     }
 
     private void delayAction(GameObjectAction action) {
@@ -95,13 +109,13 @@ public class ObjectInteractionController {
                 .get(model.getSeason())
                 .get(transformsTo);
 
-        model.set(directionLocation.x, directionLocation.y, new GameObjectDto(newObject));
+        model.set(directionLocation.x, directionLocation.y, newObject.doClone());
     }
 
     private void tryForLoot(GameObjectActionType actionType, GameObjectDto cell, Integer count) {
         Map<String, LootMappingActionsDto> seasonMappings = repository.getLootMappingCache().get(model.getSeason());
 
-        LootMappingActionsDto mappingDto = seasonMappings.get(cell.get_id());
+        LootMappingActionsDto mappingDto = seasonMappings.get(cell.getId());
         if (mappingDto == null) {
             return;
         }

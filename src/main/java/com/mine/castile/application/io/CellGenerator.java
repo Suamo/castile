@@ -1,11 +1,8 @@
 package com.mine.castile.application.io;
 
 import com.mine.castile.common.dom.GameObjectDto;
-import com.mine.castile.data.dom.enums.GameObjectAppearType;
 import com.mine.castile.data.dom.enums.Season;
-import com.mine.castile.data.dom.objects.GameObjectAppear;
 import com.mine.castile.data.persistence.MongoRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -14,30 +11,45 @@ import java.util.Random;
 @Component
 public class CellGenerator {
 
-    @Value("${game.init.season}")
-    private Season initialSeason;
-
     private Map<Season, Map<String, GameObjectDto>> cache;
 
     public CellGenerator(MongoRepository repository) {
         cache = repository.getObjectsCache();
     }
 
-    public GameObjectDto generateCell() {
-        Map<String, GameObjectDto> objectDto = cache.get(initialSeason);
+    public GameObjectDto evolveCell(Season season) {
+        Map<String, GameObjectDto> objectDto = cache.get(season);
 
         for (String id : objectDto.keySet()) {
-            GameObjectDto dto = new GameObjectDto(objectDto.get(id));
-            GameObjectAppear onStart = dto.getAppear().get(GameObjectAppearType.onStart);
-            int chance = onStart.getChance();
-            if (hadChance(chance)) {
-                return dto;
+            int chance = objectDto.get(id).getAppearOnStart();
+            if (hasChance(chance)) {
+                return objectDto.get(id).doClone();
             }
         }
-        return generateCell();
+        return evolveCell(season);
     }
 
-    private boolean hadChance(int chance) {
+    public GameObjectDto evolveCell(GameObjectDto currentDto, Season season) {
+        Map<String, Integer> possibleObjects = currentDto.getEvolutionToObject();
+
+        String id = getEvolutionId(possibleObjects, currentDto.getId());
+        return cache.get(season).get(id).doClone();
+    }
+
+    private String getEvolutionId(Map<String, Integer> possibleObjects, String defaultId) {
+        if (possibleObjects == null) {
+            return defaultId;
+        }
+        for (String id : possibleObjects.keySet()) {
+            int chance = possibleObjects.get(id);
+            if (hasChance(chance)) {
+                return id;
+            }
+        }
+        return getEvolutionId(possibleObjects, defaultId);
+    }
+
+    private boolean hasChance(int chance) {
         if (chance == 0) {
             return false;
         }
@@ -50,7 +62,7 @@ public class CellGenerator {
 
     public GameObjectDto getWall() {
         GameObjectDto dto = new GameObjectDto();
-        dto.set_id("wall");
+        dto.setId("wall");
         dto.setBlocking(true);
         return dto;
     }

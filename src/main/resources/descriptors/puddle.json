@@ -1,32 +1,31 @@
 {
   "_id": "puddle",
-  "appear": {
-    "onStart": {
-      "chance": 10
-    },
-    "inGame": {
-      "chance": 5,
-      "replaceObjects": "plain"
-    }
-  },
+  "appearOnStart": 10,
+  "appearInGame": "chance plain:5",
   "blocking": false,
   "actions": {
-    "stepInto": {
-      "count": 1,
-      "energyPerAction": 3,
-      "delayPerAction": 200
-    },
-    "gather": {
-      "count": 3,
-      "energyPerAction": 2,
-      "delayPerAction": 200
-    },
-    "hits": {
-      "count": 2,
-      "energyPerAction": 2,
-      "delayPerAction": 200,
-      "whenNoActionTransformsTo": "plain"
-    }
+    "stepInto": [
+      {
+        "count": 1,
+        "energyPerAction": 3,
+        "delayPerAction": 200
+      }
+    ],
+    "gather": [
+      {
+        "count": 3,
+        "energyPerAction": 2,
+        "delayPerAction": 200
+      }
+    ],
+    "hits": [
+      {
+        "count": 2,
+        "energyPerAction": 2,
+        "delayPerAction": 200,
+        "whenNoActionTransformsTo": "plain"
+      }
+    ]
   },
   "evolutionToObject": "plain"
 }
