@@ -36,7 +36,7 @@ public class MazeLoader {
         GameObjectDto[][] cells = new GameObjectDto[rows][columns];
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                cells[row][column] = cellGenerator.evolveCell(initialSeason);
+                cells[row][column] = cellGenerator.generateCell(initialSeason);
             }
         }
         String[] coordinates = castileCoordinates.split(":");

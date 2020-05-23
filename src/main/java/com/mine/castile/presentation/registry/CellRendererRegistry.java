@@ -34,7 +34,9 @@ public class CellRendererRegistry {
             for (String id : cache.get(season).keySet()) {
                 Map<String, Resource> images = resourceLoader.getImages();
                 Resource resource = images.get(id);
-                map.get(season).put(id, new ImageRenderer(resource));
+                int spriteRow = season.getSpriteRow();
+                int spriteColumn = season.getSpriteColumn();
+                map.get(season).put(id, new ImageRenderer(resource, spriteRow, spriteColumn));
             }
         }
     }

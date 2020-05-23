@@ -17,7 +17,7 @@ public class CellGenerator {
         cache = repository.getObjectsCache();
     }
 
-    public GameObjectDto evolveCell(Season season) {
+    public GameObjectDto generateCell(Season season) {
         Map<String, GameObjectDto> objectDto = cache.get(season);
 
         for (String id : objectDto.keySet()) {
@@ -26,7 +26,7 @@ public class CellGenerator {
                 return objectDto.get(id).doClone();
             }
         }
-        return evolveCell(season);
+        return generateCell(season);
     }
 
     public GameObjectDto evolveCell(GameObjectDto currentDto, Season season) {
