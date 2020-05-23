@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static javax.swing.BorderFactory.*;
+import static javax.swing.border.TitledBorder.CENTER;
+import static javax.swing.border.TitledBorder.DEFAULT_POSITION;
 
 @Component
 public class InventoryPanel extends JPanel {
@@ -23,13 +24,9 @@ public class InventoryPanel extends JPanel {
 
     public InventoryPanel(Model model) {
         this.model = model;
-        GridLayout mgr = new GridLayout(0, 1);
-        mgr.setHgap(20);
-        mgr.setRows(15);
+        setLayout(new GridBagLayout());
 
-        setLayout(mgr);
-
-        setOpaque(true);
+//        setOpaque(true);
 
         int width = 400;
         int height = 400;
@@ -39,20 +36,42 @@ public class InventoryPanel extends JPanel {
 
         setBounds(x, y, width, height);
         Border border = createStrokeBorder(new BasicStroke(3), new Color(192, 0, 0));
-        setBorder(createTitledBorder(border, "inventory",
-                TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, FONT));
+        setBorder(createTitledBorder(border, "inventory", CENTER, DEFAULT_POSITION, FONT));
 
         setVisible(false);
     }
 
+    public void reloadInventory() {
+        removeAll();
+        fillInv(model);
+        revalidate();
+        repaint();
+    }
+
     private void fillInv(Model model) {
         Map<String, Integer> map = inventoryAsMap(model);
+        int i = 0;
         for (String item : map.keySet()) {
-            JLabel label = new JLabel(item + " (" + map.get(item) + ")");
+            String text = item + " (" + map.get(item) + ")";
+
+
+            JLabel label = new JLabel(text);
+            label.setBorder(createEmptyBorder(0, 10, 0, 0));
+            GridBagConstraints c = new GridBagConstraints();
+            c.weightx = 2.0;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 0;
+            c.gridy = i;
+            add(label, c);
+
             label.setFont(FONT);
-            int margin = 20;
-            label.setBorder(createEmptyBorder(margin, margin, margin, margin));
-            add(label);
+            JButton button = new JButton("Eat");
+            c.weightx = 0.2;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridx = 1;
+            c.gridy = i;
+            add(button, c);
+            i++;
         }
     }
 
@@ -65,12 +84,5 @@ public class InventoryPanel extends JPanel {
             map.put(dto.getId(), ++count);
         }
         return map;
-    }
-
-    public void reloadInventory() {
-        removeAll();
-        fillInv(model);
-        revalidate();
-        repaint();
     }
 }

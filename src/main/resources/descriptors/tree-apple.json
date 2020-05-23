@@ -1,6 +1,6 @@
 {
   "_id": "tree-apple",
-  "appearOnStart": 20,
+  "appearOnStart": 30,
   "appearInGame": "chance plain:20",
   "blocking": false,
   "actions": {

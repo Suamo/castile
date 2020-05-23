@@ -1,6 +1,6 @@
 {
   "_id": "tree",
-  "appearOnStart": 100,
+  "appearOnStart": 20,
   "appearInGame": "chance plain:10",
   "blocking": false,
   "actions": {
@@ -41,6 +41,19 @@
     {
       "onSeason": "summer1,summer2,summer3",
       "toObject": "chance tree-apple:50 tree:50"
+    }
+  ],
+  "overgrowth": [
+    {
+      "fromObject": "plain",
+      "toObject": "chance tree:100",
+      "amount": "3-8"
+    },
+    {
+      "onSeason": "summer1,summer2,summer3",
+      "fromObject": "plain",
+      "toObject": "chance tree-apple:50 tree:50",
+      "amount": "2-2"
     }
   ]
 }

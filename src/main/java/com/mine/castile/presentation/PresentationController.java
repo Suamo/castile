@@ -23,6 +23,7 @@ public class PresentationController {
         this.model = model;
         this.view = view;
         this.statsPanel = statsPanel;
+        this.inventoryPanel = inventoryPanel;
     }
 
     @EventListener(ModelChangedEvent.class)
